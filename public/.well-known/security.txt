@@ -1,0 +1,5 @@
+# TODO: set a monitored security contact address before launch (RFC 9116).
+Contact: mailto:TODO-security-contact@sproconsulting.co.za
+Expires: 2027-10-30T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://sproconsulting.co.za/.well-known/security.txt

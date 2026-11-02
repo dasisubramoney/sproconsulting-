@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Metric-matched fallback: Arial scaled to Montserrat's proportions, so text barely
+ * moves when the web font swaps in (avoids layout shift). Listed right after
+ * Montserrat in tailwind.config.ts fontFamily.
+ */
+@font-face {
+  font-family: 'Montserrat Fallback';
+  src: local('Arial');
+  ascent-override: 85.79%;
+  descent-override: 22.25%;
+  line-gap-override: 0%;
+  size-adjust: 112.83%;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-surface font-sans text-ink antialiased;
+  }
+
+  /* Visible, consistent focus ring (WCAG 2.2 — 2.4.7 / 2.4.11). */
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-crimson;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    @apply outline-white;
+  }
+
+  ::selection {
+    @apply bg-navy text-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-eyebrow uppercase text-maroon;
+  }
+
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-sm font-semibold
+      transition-colors duration-200 ease-brand disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-crimson text-white hover:bg-crimson-700;
+  }
+  .btn-secondary {
+    @apply btn border border-navy text-navy hover:bg-navy hover:text-white;
+  }
+  .btn-on-dark {
+    @apply btn border border-white/70 text-white hover:bg-white hover:text-navy;
+  }
+
+  /* Signature diagonal slash — see DESIGN.md "Motif". */
+  .slash-band {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/*
+ * Entrance motion for above-the-fold content. Pure CSS so it runs before any JS
+ * and never causes a flash. Starts at near-zero (not zero) opacity so the hero
+ * still counts as painted for Largest Contentful Paint. Disabled by the
+ * reduced-motion rule above.
+ */
+@keyframes rise {
+  from {
+    opacity: 0.01;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slash-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+[data-reveal] {
+  animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+[data-reveal='1'] {
+  animation-delay: 0.08s;
+}
+[data-reveal='2'] {
+  animation-delay: 0.16s;
+}
+[data-reveal='3'] {
+  animation-delay: 0.24s;
+}
+
+[data-slash-intro] [data-slash-band] {
+  animation: slash-draw 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+[data-slash-intro] [data-slash-band] + [data-slash-band] {
+  animation-delay: 0.4s;
+}
+
+/* Lenis smooth-scroll integration (classes added by Lenis on <html>). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}

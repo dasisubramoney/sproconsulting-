@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en-ZA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#252B72" />
+    <title>S-PRO Consulting Engineers | Sustainable Innovation — Engineering Solutions</title>
+    <meta
+      name="description"
+      content="Cape Town-based Electrical, Mechanical, Fire Protection, HVAC and Wet Services consulting engineers. Design, supervision and commissioning of complex capital projects."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- TODO: add /apple-touch-icon.png (180×180) and /favicon.ico once the logo artwork is supplied. -->
+  </head>
+  <body>
+    <noscript>
+      <p>S-PRO Consulting Engineers — please enable JavaScript to view this site, or call +27 (0)21 671 0713.</p>
+    </noscript>
+
+    <!--
+      Static copy of the contact form so Netlify Forms detects it at build time.
+      Field names must match src/pages/ContactPage.tsx exactly.
+    -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="company" />
+      <input type="text" name="service" />
+      <textarea name="message"></textarea>
+      <input type="checkbox" name="consent" />
+    </form>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

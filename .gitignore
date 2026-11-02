@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+.netlify
+*.tsbuildinfo
+.vite
+.DS_Store
+Thumbs.db
+npm-debug.log*
+dist-ssr

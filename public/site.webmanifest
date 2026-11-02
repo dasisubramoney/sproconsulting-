@@ -1,0 +1,10 @@
+{
+  "name": "S-PRO Consulting Engineers",
+  "short_name": "S-PRO",
+  "description": "Sustainable Innovation — Engineering Solutions",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#FFFFFF",
+  "theme_color": "#252B72",
+  "icons": [{ "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" }]
+}
