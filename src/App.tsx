@@ -1,17 +1,18 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router';
 import { Layout } from '@/components/layout/Layout';
+import { pageLoaders } from '@/pages/loaders';
 
-const HomePage = lazy(() => import('@/pages/HomePage'));
-const AboutPage = lazy(() => import('@/pages/AboutPage'));
-const ServicesPage = lazy(() => import('@/pages/ServicesPage'));
-const ServiceDetailPage = lazy(() => import('@/pages/ServiceDetailPage'));
-const SustainabilityPage = lazy(() => import('@/pages/SustainabilityPage'));
-const ProjectsPage = lazy(() => import('@/pages/ProjectsPage'));
-const TeamPage = lazy(() => import('@/pages/TeamPage'));
-const ContactPage = lazy(() => import('@/pages/ContactPage'));
-const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
-const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
+const HomePage = lazy(pageLoaders.home);
+const AboutPage = lazy(pageLoaders.about);
+const ServicesPage = lazy(pageLoaders.services);
+const ServiceDetailPage = lazy(pageLoaders.serviceDetail);
+const SustainabilityPage = lazy(pageLoaders.sustainability);
+const ProjectsPage = lazy(pageLoaders.projects);
+const TeamPage = lazy(pageLoaders.team);
+const ContactPage = lazy(pageLoaders.contact);
+const PrivacyPage = lazy(pageLoaders.privacy);
+const NotFoundPage = lazy(pageLoaders.notFound);
 
 // Keep in sync with src/config/routes.ts (drives the sitemap).
 export default function App() {

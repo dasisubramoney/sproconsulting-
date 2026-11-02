@@ -5,6 +5,7 @@ import { mainNav, serviceSlugs } from '@/config/routes';
 import { serviceTitle } from '@/content/services';
 import { Logo } from '@/components/ui/Logo';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
+import { MotionToggle } from '@/motion/MotionToggle';
 
 export function Footer() {
   const { address, phoneDisplay, phoneE164 } = company.contact;
@@ -85,9 +86,12 @@ export function Footer() {
           <p>
             © {year} {company.legalName}. Reg: {company.registration}
           </p>
-          <Link to="/privacy" className="inline-flex min-h-7 items-center hover:text-white hover:underline">
-            Privacy notice (POPIA)
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <MotionToggle />
+            <Link to="/privacy" className="inline-flex min-h-7 items-center hover:text-white hover:underline">
+              Privacy notice (POPIA)
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

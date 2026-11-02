@@ -9,7 +9,7 @@
 // It also guards the CSP: the build fails if any page contains an inline <script>
 // (other than JSON-LD data) or a style="" attribute, both of which the CSP blocks.
 
-import { readFileSync, readdirSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -18,16 +18,10 @@ const dist = join(root, 'dist');
 const ssrDir = join(root, 'dist-ssr');
 
 const { render, allRoutes } = await import(pathToFileURL(join(ssrDir, 'entry-server.js')).href);
-// Preload the Latin subset of Montserrat (hashed filename) so text renders in the
-// brand font sooner and the fallback swap is shorter.
-const latinFont = readdirSync(join(dist, 'assets')).find((f) => /^montserrat-latin-wght-normal-.*\.woff2$/.test(f));
-if (!latinFont) throw new Error('Montserrat latin woff2 not found in dist/assets');
-const fontPreload = `<link rel="preload" href="/assets/${latinFont}" as="font" type="font/woff2" crossorigin>`;
-
-const template = readFileSync(join(dist, 'index.html'), 'utf8').replace(
-  '<link rel="icon"',
-  `${fontPreload}\n    <link rel="icon"`,
-);
+// No font <link rel="preload">: Chrome warns "preloaded but not used" whenever the font
+// is already in memory (e.g. a reload in the same tab). The metric-matched
+// "Montserrat Fallback" (src/styles/index.css) keeps the font swap free of layout shift.
+const template = readFileSync(join(dist, 'index.html'), 'utf8');
 
 function outFile(route) {
   if (route === '/') return join(dist, 'index.html');

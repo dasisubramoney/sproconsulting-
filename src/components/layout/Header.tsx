@@ -6,7 +6,7 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import { mainNav, serviceSlugs } from '@/config/routes';
 import { serviceTitle } from '@/content/services';
 import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useReducedMotion } from '@/motion/useReducedMotion';
 import { useHydrated } from '@/hooks/useHydrated';
 import { Logo } from '@/components/ui/Logo';
 
@@ -168,7 +168,7 @@ function ServicesMenu() {
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const reduced = usePrefersReducedMotion();
+  const reduced = useReducedMotion();
   // The portal target (document.body) only exists in the browser, not during pre-rendering.
   const hydrated = useHydrated();
   useLockBodyScroll(open);

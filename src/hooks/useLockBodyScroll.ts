@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getLenis } from './useSmoothScroll';
+import { getLenis } from '@/motion/lenis';
 
 export function useLockBodyScroll(locked: boolean): void {
   useEffect(() => {

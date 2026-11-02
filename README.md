@@ -68,13 +68,29 @@ The rebuild was delivered in six phases. Everything below is in this repository 
 - Strict Content Security Policy (`'self'` only, no `unsafe-inline`); the build fails if any page contains an inline script or `style` attribute.
 - HSTS, `nosniff`, `X-Frame-Options: DENY`, Referrer-Policy, Permissions-Policy and COOP headers.
 - 42 permanent (301) redirects from the old Muse URLs; unknown URLs return a real 404.
-- Font-loading layout shift removed with a size-matched fallback font and a preload.
+- Font-loading layout shift removed with a size-matched fallback font. (A font preload was added here, then removed in the motion pass because Chrome warned about it whenever the font was already cached.)
 - `public/.well-known/security.txt` added.
 - `npm audit`: 0 vulnerabilities. No trackers or analytics.
 - Measured results: see [Quality](#quality-accessibility-performance-seo).
 
 **6. Documentation**
 - This README (running, editing content, deploying, security, quality results, open TODOs) and [DESIGN.md](DESIGN.md).
+
+### Motion & effects pass
+
+A second piece of work gives the site its own motion identity: design on paper → built reality, and systems that flow. It runs in seven phases, each approved before the next starts.
+
+**Phase 1 — Global motion system (done)**
+- All motion code now lives in [src/motion/](src/motion/): shared timing tokens, the hooks `useReveal`, `useSplitHeading`, `useCountUp`, `useParallax` and `useReducedMotion`, and the site-wide effects. Documented in [DESIGN.md → Motion](DESIGN.md#motion).
+- **Page transitions:** on navigation, a crimson band then a maroon band sweep diagonally across the screen, the new page swaps in underneath, and the bands sweep away (about 650 ms). Focus moves to the new page's heading for screen readers.
+- **First-visit intro:** the tower mark draws itself as blueprint lines, fills with brand colour and slides away on the diagonal (about 1.2 s), once per browser session. Any key or tap skips it. The page loads underneath, so it doesn't slow the site down. It uses the placeholder logo until the official artwork is supplied.
+- **Headings** rise line by line as they scroll into view, and content blocks fade up in sequence. An angled image wipe is ready for when photos are added.
+- **Scroll progress:** a thin crimson bar with an angled edge along the top of the page.
+- **"Reduce motion" switch** in the footer, remembered on the visitor's device. With it on, or with reduced motion set in the device's settings, there is no intro, no page wipe, no smooth scrolling and no scroll animations; content is simply there.
+- GSAP (now including SplitText via `@gsap/react` and `useGSAP`) and Lenis load in one separate file after the page is interactive. The code needed for the first paint got 3.7 KB *smaller* (117.0 → 113.3 KB gzipped).
+- Tested: no console errors or CSP violations under `npm run preview` (desktop, mobile, reduced motion, JavaScript off). Lighthouse mobile performance 99–100 on a quiet machine, CLS 0.
+
+**Still to do:** Phase 2 home hero "Blueprint to Reality" · Phase 3 animated discipline icons · Phase 4 Sustainability "Follow the Water" · Phase 5 projects timeline and map · Phase 6 stats, team and details · Phase 7 cross-browser QA and a full "Motion system" README section.
 
 ---
 
@@ -117,11 +133,13 @@ src/
     sections/           page hero, CTA band, stats band, project card
     contact/            contact form, validation, click-to-load map
     ui/                 small building blocks (logo, slash motif, tags, avatars…)
-  hooks/              smooth scroll, scroll animations, reduced motion, hydration
-  styles/index.css    Tailwind layers, fonts, entrance animations
+  motion/             all animation: tokens, GSAP hooks, page transition, intro, reduce-motion switch
+  hooks/              hydration, body scroll lock
+  styles/index.css    Tailwind layers, fonts, entrance animations, intro animation
   entry-server.tsx    renders a route to HTML at build time
 scripts/prerender.mjs writes dist/*.html for every route; fails on CSP-unsafe output
-public/               copied as-is: favicon, robots.txt, manifest, security.txt, images/
+public/               copied as-is: favicon, robots.txt, manifest, security.txt, images/,
+                        motion-gate.js (tiny script that applies reduce-motion and the intro before first paint)
 ```
 
 ---
@@ -303,7 +321,7 @@ Lighthouse scores vary by a few points between runs. Re-measure on the Netlify d
 - Touch targets are at least 24px.
 - Contrast rules are in [DESIGN.md](DESIGN.md#contrast-rules-wcag-22-aa). Crimson is never used for text on navy.
 
-**Reduced motion:** with the OS setting on, smooth scrolling and scroll animations are off and CSS transitions are near-instant. Content never depends on an animation to become visible.
+**Reduced motion:** with the OS setting on, or the footer **Reduce motion** switch on, there is no intro or page wipe, smooth scrolling and scroll animations are off, and CSS transitions are near-instant. Content never depends on an animation to become visible.
 
 **SEO:**
 

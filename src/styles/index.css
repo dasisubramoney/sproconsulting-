@@ -39,6 +39,8 @@
     @apply bg-navy text-white;
   }
 
+  /* Reduced motion: the OS setting (works without JS) or the footer toggle
+     (html[data-reduce-motion], set by public/motion-gate.js and src/motion/preference.ts). */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -48,6 +50,20 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+  html[data-reduce-motion] *,
+  html[data-reduce-motion] *::before,
+  html[data-reduce-motion] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Headings receive programmatic focus after a route change (ScrollToTop) so screen
+     readers announce the new page. They aren't interactive, so no ring. */
+  h1[tabindex='-1']:focus {
+    outline: none;
   }
 }
 
@@ -123,6 +139,108 @@
 }
 [data-slash-intro] [data-slash-band] + [data-slash-band] {
   animation-delay: 0.4s;
+}
+
+/* During the first-visit intro, hold the hero entrance until the panel slides away. */
+html[data-intro] [data-reveal] {
+  animation-delay: 0.85s;
+}
+html[data-intro] [data-reveal='1'] {
+  animation-delay: 0.93s;
+}
+html[data-intro] [data-reveal='2'] {
+  animation-delay: 1.01s;
+}
+html[data-intro] [data-reveal='3'] {
+  animation-delay: 1.09s;
+}
+html[data-intro] [data-slash-intro] [data-slash-band] {
+  animation-delay: 1s;
+}
+html[data-intro] [data-slash-intro] [data-slash-band] + [data-slash-band] {
+  animation-delay: 1.15s;
+}
+
+/*
+ * First-visit intro (src/motion/IntroOverlay.tsx), ~1.2 s:
+ *   0–0.7s     blueprint lines draw (stroke-dashoffset, pathLength=1)
+ *   0.5–0.75s  brand colour fills in
+ *   0.8–1.2s   panel wipes away on the slash diagonal, mark slides out
+ * Ends hidden through fill-mode, so it can never get stuck on screen.
+ */
+.intro {
+  display: none;
+}
+html[data-intro] .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  background-color: theme('colors.navy.DEFAULT');
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
+  animation: intro-out 0.4s cubic-bezier(0.65, 0, 0.35, 1) 0.8s both;
+}
+.intro-lines path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: intro-draw 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.intro-lines path:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.intro-lines path:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.intro-fill {
+  opacity: 0;
+  animation: intro-fade 0.25s ease-out 0.5s forwards;
+}
+.intro-mark {
+  animation: intro-mark-out 0.4s cubic-bezier(0.65, 0, 0.35, 1) 0.8s both;
+}
+.intro-hint {
+  animation: intro-fade 0.3s ease-out 0.2s both;
+}
+@keyframes intro-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes intro-mark-out {
+  to {
+    transform: translate(40vw, -40vh);
+  }
+}
+@keyframes intro-out {
+  from {
+    clip-path: polygon(0% 0%, 130% 0%, 100% 100%, -30% 100%);
+  }
+  to {
+    clip-path: polygon(130% 0%, 130% 0%, 100% 100%, 100% 100%);
+    visibility: hidden;
+  }
+}
+
+/* SplitText line masks for [data-split] headings (src/motion/useSplitHeading.ts). */
+.split-line,
+.split-line-mask {
+  display: block;
 }
 
 /* Lenis smooth-scroll integration (classes added by Lenis on <html>). */

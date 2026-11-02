@@ -91,21 +91,75 @@ stock-photo overlays:
 
 ## Motion
 
-- Easing: `ease-brand` = `cubic-bezier(0.22, 1, 0.36, 1)` (GSAP: `power3.out`). Durations 200ms (UI) to 1.1s (slash draw-in).
-- **Above the fold — CSS keyframes** (`src/styles/index.css`), so they run before any JS:
-  - `data-reveal` / `data-reveal="1|2|3"`: hero text rises in, staggered 80ms per step.
-  - `<SlashBands intro>`: hero bands draw in from the right, maroon 150ms after crimson.
-- **Below the fold — GSAP + ScrollTrigger**, lazy-loaded by `useScrollMotion` after the page renders:
-  - `data-reveal-item`: cards, list items and section headings fade up in staggered batches.
-  - `<SlashBands>` (no `intro`): bands draw in when scrolled into view.
-  - Hero bands drift slightly (parallax) as the hero scrolls away.
-  - `data-stat`: numbers count up once, then settle on the exact source text.
-  - Only elements that start below the viewport are animated, so nothing visible ever blinks out.
-- **Framer Motion** (`LazyMotion` + `m.*` components only): mobile drawer, project-filter fade-ins.
-- **Lenis**: smooth scrolling, wired to ScrollTrigger.
-- **`prefers-reduced-motion: reduce`** disables Lenis, GSAP scroll effects and Framer transitions (duration 0). Content must never depend on an animation running to become visible.
-- CSP: animate through the CSSOM only (Framer/GSAP do this). Do not inject `<style>` tags. Avoid `AnimatePresence mode="popLayout"`.
-- **No `style={…}` props, and no Framer `initial` on pre-rendered elements.** Pages are pre-rendered to static HTML, where these become `style=""` attributes that the CSP blocks (and React never re-applies on hydration). Use Tailwind classes or CSS keyframes instead. `npm run build` fails if a page contains a `style` attribute or inline script.
+Motion tells the S-PRO story — **design on paper → built reality**, and **systems that flow**.
+It should feel precise, confident and engineered: crisp eases, no bounce, nothing playful.
+Everything lives in [`src/motion/`](src/motion/).
+
+### Tokens — [`src/motion/tokens.ts`](src/motion/tokens.ts)
+
+| Token | Value | Use |
+|---|---|---|
+| `duration.ui` | 200 ms | Hover, focus, toggles |
+| `duration.wipe` | 240 ms | One slash band crossing the screen (route transition) |
+| `duration.reveal` | 700 ms | Content fading up |
+| `duration.heading` | 900 ms | Heading lines rising from their mask |
+| `duration.draw` | 1.1 s | Slash bands and image wipes drawing in |
+| `duration.count` | 1.6 s | Number count-ups |
+| `ease.out` / `bezier.out` | `power3.out` / `cubic-bezier(0.22, 1, 0.36, 1)` | Default for entrances (= Tailwind `ease-brand`) |
+| `ease.expo` | `expo.out` | Heading lines, image wipes |
+| `ease.inOut` / `bezier.inOut` | `power3.inOut` / `cubic-bezier(0.65, 0, 0.35, 1)` | Wipes that cover and uncover the screen |
+| `stagger.items` / `.lines` / `.bands` | 80 / 80 / 50 ms | Delay between siblings |
+| `distance.reveal` | 32 px | How far content rises |
+| `revealStart` | `top 88%` | When scroll reveals fire |
+| `slashAngle` | 20° | The slash, rising left to right |
+
+CSS keyframes in `src/styles/index.css` mirror these values; change both together.
+
+### Hooks (GSAP, inside `useGSAP` so they are reverted on unmount)
+
+All take a scope ref and the reduced-motion flag, and react to data attributes, so pages stay free of animation code.
+
+| Hook | Attribute | Effect |
+|---|---|---|
+| `useReveal` | `data-reveal-item` | Fades up in staggered batches |
+| | `data-reveal-image` | Revealed through an angled clip-path wipe (the slash angle) |
+| | `data-slash` | Section slash bands draw in, maroon after crimson |
+| `useSplitHeading` | `data-split` | Heading rises line by line from a mask (SplitText `lines` + `mask`), then reverts to plain text. Static text only. |
+| `useCountUp` | `data-stat` | Number counts up once, then settles on the exact source text |
+| `useParallax` | `data-parallax="18"` | Layer drifts by that % as its section scrolls away. Put it on an untransformed wrapper. |
+| `useReducedMotion` | — | OS setting OR the footer toggle (safe in eager code) |
+
+Only elements that **start below the viewport** get scroll reveals, so nothing visible ever blinks out.
+
+### Site-wide effects
+
+- **First-visit intro** (`IntroOverlay`): the tower mark draws as blueprint line art, fills with brand colour, and the panel wipes away on the diagonal — about 1.2 s, once per browser session, skipped by any key or tap. Pure CSS, started before first paint by `public/motion-gate.js`; the page renders underneath, so it never delays LCP.
+- **Route transition** (`PageTransition`): a crimson band then a maroon band sweep up across the screen (clip-path), the page swaps underneath, and they sweep off the top — about 650 ms. Scroll resets and focus moves to the new page's `<h1>` while covered.
+- **Scroll progress** (`ScrollProgress`): a 4 px crimson bar with an angled leading edge along the top.
+- **Smooth scroll**: Lenis, driven by `gsap.ticker` and feeding `ScrollTrigger.update`.
+- **Hero entrance**: CSS keyframes (`data-reveal="1|2|3"`, `<SlashBands intro>`), so it runs before any JS. During the intro it waits for the panel to clear.
+
+### Loading
+
+- GSAP, ScrollTrigger, SplitText, `@gsap/react` and Lenis are in one lazy chunk (`runtime.tsx`), fetched after hydration. **Import `src/motion/gsap.ts` and the hooks only from lazily loaded modules**, never from eager code.
+- Page-specific plugins (DrawSVG, MorphSVG, Flip) are registered in the page modules that use them.
+- Framer Motion (`LazyMotion` + `m.*` only) handles the route transition and the mobile drawer.
+
+### Reduced motion
+
+- Honoured from the OS setting and the footer **Reduce motion** toggle (stored in `localStorage` as `sp-reduce-motion`).
+- `public/motion-gate.js` sets `html[data-reduce-motion]` before first paint, so CSS animations never start.
+- With reduced motion: no intro, no route wipe (pages swap instantly), no Lenis, no scroll reveals, split headings, count-ups or parallax — content is simply there. Framer runs with `reducedMotion="always"`.
+- Content must never depend on an animation to become visible. Initial (hidden) states are set from JS, never CSS, so content shows without JS or if the motion chunk fails.
+
+### Rules (CSP and performance)
+
+- Animate only `transform`, `opacity`, `clip-path` and SVG stroke properties — never layout properties. CLS must stay 0.
+- Animate through the CSSOM only (Framer/GSAP do this). Do not inject `<style>` tags. Avoid `AnimatePresence mode="popLayout"`.
+- **No `style={…}` props, and no Framer `initial`/`animate` on pre-rendered elements.** Pages are pre-rendered to static HTML, where these become `style=""` attributes that the CSP blocks (and React never re-applies on hydration). Use Tailwind classes or CSS keyframes, or render the element only after hydration (`useHydrated`). `npm run build` fails if a page contains a `style` attribute or inline script.
+- No libraries that use `eval` / `new Function` (the CSP has no `unsafe-eval`), and no CDNs.
+- Nothing flashes more than 3 times per second.
+- Components above the page's Suspense boundary (providers, `Layout`) must not trigger a synchronous re-render of that boundary during hydration — React then discards the pre-rendered HTML (error #421). Use a leaf component or `startTransition`.
 
 ## Imagery
 

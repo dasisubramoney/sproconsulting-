@@ -10,7 +10,7 @@ interface SlashBandsProps {
   size?: 'sm' | 'md' | 'lg';
   /**
    * Above-the-fold bands (heroes): draw in with CSS on load and drift on scroll.
-   * Otherwise the bands draw in via GSAP when scrolled into view (useScrollMotion).
+   * Otherwise the bands draw in via GSAP when scrolled into view (src/motion/useReveal.ts).
    */
   intro?: boolean;
 }
@@ -35,7 +35,7 @@ export function SlashBands({ region, angle = -22, size = 'md', intro = false }: 
       className={`pointer-events-none absolute overflow-hidden ${region}`}
     >
       {/* Untransformed layer that GSAP moves for parallax, so the rotation below is never touched. */}
-      <div className="absolute inset-0" data-slash-parallax>
+      <div className="absolute inset-0" data-parallax={intro ? 18 : undefined}>
         <div className={`absolute left-[-20%] top-1/2 w-[140%] -translate-y-1/2 ${rotations[angle]}`}>
           <div className={`${heights[size]} w-full origin-right bg-crimson`} data-slash-band />
           <div className={`${heights[size]} mt-3 w-full origin-right bg-maroon sm:mt-4`} data-slash-band />
