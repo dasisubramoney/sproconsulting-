@@ -2,18 +2,21 @@ import type { RefObject } from 'react';
 import { belowFold, gsap, ScrollTrigger, useGSAP } from './gsap';
 import { distance, duration, ease, revealStart, stagger } from './tokens';
 
-// Angled wipe that matches the slash motif: the leading edge leans like the bands.
-const IMAGE_HIDDEN = 'polygon(0% 0%, 0% 0%, -25% 100%, -25% 100%)';
-const IMAGE_SHOWN = 'polygon(0% 0%, 125% 0%, 100% 100%, -25% 100%)';
+// Curved wipe, after the copper sweep: a circle grows from the bottom-left corner.
+const IMAGE_HIDDEN = 'circle(0% at 0% 100%)';
+const IMAGE_SHOWN = 'circle(150% at 0% 100%)';
 
 /**
  * Scroll reveals inside `scope`:
  *  - [data-reveal-item]   fades up in staggered batches
- *  - [data-reveal-image]  revealed through an angled clip-path wipe
- *  - [data-slash]         section slash bands draw in, maroon after crimson
+ *  - [data-reveal-image]  revealed through a curved clip-path wipe; a sibling
+ *                         [data-reveal-mark] crosshair flashes at its corner (<RevealImage>)
+ *  - [data-rule]          a copper rule or sweep, drawn from the left (scaleX)
+ * Sketch lines ([data-sketch]) are drawn by useDrawLines.
  *
  * Initial states are set here, in JS, and only for elements below the fold, so
  * content is always visible without JS, with reduced motion, or if GSAP fails.
+ * Above the fold the same graphics draw with CSS instead (`intro` props).
  */
 export function useReveal(scope: RefObject<HTMLElement | null>, reduced: boolean): void {
   useGSAP(
@@ -41,30 +44,26 @@ export function useReveal(scope: RefObject<HTMLElement | null>, reduced: boolean
       }
 
       for (const image of gsap.utils.toArray<HTMLElement>('[data-reveal-image]', root).filter(belowFold)) {
-        gsap.fromTo(
+        const mark = image.parentElement?.querySelector('[data-reveal-mark]');
+        const tl = gsap.timeline({ scrollTrigger: { trigger: image, start: revealStart, once: true } });
+        tl.fromTo(
           image,
           { clipPath: IMAGE_HIDDEN },
-          {
-            clipPath: IMAGE_SHOWN,
-            duration: duration.draw,
-            ease: ease.expo,
-            clearProps: 'clipPath',
-            scrollTrigger: { trigger: image, start: revealStart, once: true },
-          },
+          { clipPath: IMAGE_SHOWN, duration: duration.draw, ease: ease.expo, clearProps: 'clipPath' },
         );
+        // Registration mark: appears as the wipe starts, gone once the image settles.
+        if (mark) tl.fromTo(mark, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25, yoyo: true, repeat: 1, repeatDelay: 0.5 }, 0);
       }
 
-      // Hero bands (data-slash-intro) draw in with CSS on load instead.
-      const slashes = gsap.utils
-        .toArray<HTMLElement>('[data-slash]:not([data-slash-intro])', root)
-        .filter(belowFold);
-      for (const slash of slashes) {
-        gsap.from(slash.querySelectorAll('[data-slash-band]'), {
+      // Rules in a "Follow the Water" stage draw when the water reaches it (WaterMotion).
+      const rules = gsap.utils.toArray<Element>('[data-rule]', root).filter((r) => !r.closest('[data-water-stage]'));
+      for (const rule of rules.filter(belowFold)) {
+        gsap.from(rule, {
           scaleX: 0,
+          transformOrigin: '0% 50%',
           duration: duration.draw,
           ease: ease.out,
-          stagger: 0.15,
-          scrollTrigger: { trigger: slash, start: 'top 85%', once: true },
+          scrollTrigger: { trigger: rule, start: revealStart, once: true },
         });
       }
     },

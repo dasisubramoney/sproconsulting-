@@ -12,19 +12,19 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="on-dark relative overflow-hidden border-t-4 border-crimson bg-navy text-navy-100">
+    <footer className="on-dark relative overflow-hidden border-t-2 border-copper-500 bg-ink text-steel-200">
 
       <div className="container-page relative grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-1">
-          <Logo variant="light" />
+          <Logo size="footer" onDark />
           <p className="mt-5 text-sm leading-relaxed">
             {company.tagline.primary} — {company.tagline.secondary}
           </p>
-          <p className="mt-3 text-xs leading-relaxed text-navy-200">{company.footerLine}</p>
+          <p className="mt-3 text-xs leading-relaxed text-steel-300">{company.footerLine}</p>
         </div>
 
         <nav aria-label="Footer">
-          <h2 className="text-eyebrow uppercase text-white">Company</h2>
+          <h2 className="text-eyebrow uppercase text-copper-300">Company</h2>
           <ul className="mt-3 space-y-0.5 text-sm">
             {mainNav.map((item) => (
               <li key={item.to}>
@@ -42,7 +42,7 @@ export function Footer() {
         </nav>
 
         <div>
-          <h2 className="text-eyebrow uppercase text-white">Services</h2>
+          <h2 className="text-eyebrow uppercase text-copper-300">Services</h2>
           <ul className="mt-3 space-y-0.5 text-sm">
             {serviceSlugs.map((slug) => (
               <li key={slug}>
@@ -55,7 +55,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-eyebrow uppercase text-white">Get in touch</h2>
+          <h2 className="text-eyebrow uppercase text-copper-300">Get in touch</h2>
           <address className="mt-4 space-y-3 text-sm not-italic">
             <p className="flex gap-3">
               <MapPin aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-white" />
@@ -82,7 +82,7 @@ export function Footer() {
       </div>
 
       <div className="relative border-t border-white/15">
-        <div className="container-page flex flex-col gap-2 py-6 text-xs text-navy-200 sm:flex-row sm:items-center sm:justify-between">
+        <div className="container-page flex flex-col gap-2 py-6 text-xs text-steel-300 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {company.legalName}. Reg: {company.registration}
           </p>

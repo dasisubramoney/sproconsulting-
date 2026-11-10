@@ -23,7 +23,7 @@ export default function ContactPage() {
 
       <div className="container-page grid gap-16 py-20 sm:py-24 lg:grid-cols-12">
         <section aria-labelledby="form-heading" className="lg:col-span-7">
-          <h2 id="form-heading" className="text-h2 text-navy">
+          <h2 id="form-heading" className="text-h2 text-steel-700">
             Send us a message
           </h2>
           <div className="mt-8">
@@ -32,12 +32,12 @@ export default function ContactPage() {
         </section>
 
         <aside aria-labelledby="details-heading" className="lg:col-span-5">
-          <h2 id="details-heading" className="text-h2 text-navy">
+          <h2 id="details-heading" className="text-h2 text-steel-700">
             Our office
           </h2>
           <address className="mt-8 space-y-6 not-italic">
             <div className="flex gap-4">
-              <MapPin aria-hidden="true" className="mt-1 h-5 w-5 shrink-0 text-crimson" />
+              <MapPin aria-hidden="true" className="mt-1 h-5 w-5 shrink-0 text-copper-700" />
               <p className="leading-relaxed text-ink">
                 {address.building}
                 <br />
@@ -49,17 +49,17 @@ export default function ContactPage() {
               </p>
             </div>
             <div className="flex gap-4">
-              <Phone aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-crimson" />
-              <a href={`tel:${phoneE164}`} className="font-semibold text-navy hover:text-crimson hover:underline">
+              <Phone aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-copper-700" />
+              <a href={`tel:${phoneE164}`} className="font-semibold text-steel-700 hover:text-copper-800 hover:underline">
                 {phoneDisplay}
               </a>
             </div>
             <div className="flex gap-4">
-              <Mail aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-crimson" />
-              <ObfuscatedEmail className="break-all font-semibold text-navy hover:text-crimson hover:underline" />
+              <Mail aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-copper-700" />
+              <ObfuscatedEmail className="break-all font-semibold text-steel-700 hover:text-copper-800 hover:underline" />
             </div>
           </address>
-          <p className="mt-8 text-sm text-ink-muted">
+          <p className="mt-8 text-sm text-steel-600">
             {company.legalName}
             <br />
             Reg: {company.registration}

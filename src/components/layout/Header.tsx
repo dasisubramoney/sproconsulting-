@@ -9,10 +9,11 @@ import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 import { useReducedMotion } from '@/motion/useReducedMotion';
 import { useHydrated } from '@/hooks/useHydrated';
 import { Logo } from '@/components/ui/Logo';
+import { SweepDivider } from '@/components/ui/SweepDivider';
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `relative inline-flex min-h-11 items-center px-3 text-sm font-semibold transition-colors hover:text-crimson ${
-    isActive ? 'text-crimson' : 'text-navy'
+  `relative inline-flex min-h-11 items-center px-3 text-sm font-semibold transition-colors hover:text-copper-800 ${
+    isActive ? 'text-copper-700' : 'text-steel-700'
   }`;
 
 export function Header() {
@@ -33,7 +34,7 @@ export function Header() {
   return (
     <header
       className={`sticky top-0 z-50 border-b bg-white/95 backdrop-blur transition-shadow duration-300 supports-[backdrop-filter]:bg-white/85 ${
-        scrolled ? 'border-transparent shadow-card' : 'border-surface-muted'
+        scrolled ? 'border-transparent shadow-card' : 'border-steel-200'
       }`}
     >
       <div className="container-page flex h-16 items-center justify-between gap-6 lg:h-20">
@@ -66,7 +67,7 @@ export function Header() {
           </Link>
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-sm text-navy lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-sm text-steel-700 lg:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen(true)}
@@ -126,8 +127,8 @@ function ServicesMenu() {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className={`inline-flex min-h-11 items-center gap-1 px-3 text-sm font-semibold transition-colors hover:text-crimson ${
-          active ? 'text-crimson' : 'text-navy'
+        className={`inline-flex min-h-11 items-center gap-1 px-3 text-sm font-semibold transition-colors hover:text-copper-800 ${
+          active ? 'text-copper-700' : 'text-steel-700'
         }`}
       >
         Services
@@ -136,14 +137,14 @@ function ServicesMenu() {
       <div
         id={panelId}
         hidden={!open}
-        className="absolute left-0 top-full mt-2 w-64 border-t-2 border-crimson bg-white py-2 shadow-card"
+        className="absolute left-0 top-full mt-2 w-64 border-t-2 border-copper-500 bg-white py-2 shadow-card"
       >
         <ul>
           <li>
             <NavLink
               to="/services"
               end
-              className="block px-4 py-2.5 text-sm font-semibold text-navy hover:bg-surface-subtle"
+              className="block px-4 py-2.5 text-sm font-semibold text-steel-700 hover:bg-white"
             >
               All services
             </NavLink>
@@ -153,7 +154,7 @@ function ServicesMenu() {
               <NavLink
                 to={`/services/${slug}`}
                 className={({ isActive }) =>
-                  `block px-4 py-2.5 text-sm hover:bg-surface-subtle ${isActive ? 'font-semibold text-crimson' : 'text-ink'}`
+                  `block px-4 py-2.5 text-sm hover:bg-white ${isActive ? 'font-semibold text-copper-700' : 'text-ink'}`
                 }
               >
                 {serviceTitle(slug)}
@@ -213,7 +214,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       {open && (
         <div className="fixed inset-0 z-[60] lg:hidden">
           <m.div
-            className="absolute inset-0 bg-navy-950/60"
+            className="absolute inset-0 bg-ink/60"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -227,14 +228,14 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             role="dialog"
             aria-modal="true"
             aria-label="Main menu"
-            className="on-dark absolute inset-y-0 right-0 flex w-full max-w-sm flex-col overflow-y-auto bg-navy text-white"
+            className="on-dark absolute inset-y-0 right-0 flex w-full max-w-sm flex-col overflow-y-auto bg-ink text-white"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ duration, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="flex h-16 items-center justify-between px-4">
-              <Logo variant="light" />
+            <div className="flex h-20 items-center justify-between px-4">
+              <Logo size="drawer" onDark />
               <button
                 type="button"
                 onClick={onClose}
@@ -263,7 +264,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                             <NavLink
                               to={`/services/${slug}`}
                               className={({ isActive }) =>
-                                `block py-2 text-sm ${isActive ? 'font-semibold text-white' : 'text-navy-100'}`
+                                `block py-2 text-sm ${isActive ? 'font-semibold text-white' : 'text-steel-200'}`
                               }
                             >
                               {serviceTitle(slug)}
@@ -279,11 +280,8 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                 Contact us
               </Link>
             </nav>
-            {/* Signature slash at the foot of the drawer. */}
-            <div aria-hidden="true" className="relative h-24 overflow-hidden">
-              <div className="absolute -bottom-6 -left-10 h-10 w-[140%] -rotate-[18deg] bg-crimson" />
-              <div className="absolute -bottom-12 -left-10 h-10 w-[140%] -rotate-[18deg] bg-maroon" />
-            </div>
+            {/* Copper sweep at the foot of the drawer. */}
+            <SweepDivider dark className="mb-8 mt-4" />
           </m.div>
         </div>
       )}
@@ -298,7 +296,7 @@ function MobileLink({ to, end, children }: { to: string; end?: boolean; children
       to={to}
       end={end}
       className={({ isActive }) =>
-        `block py-3 text-lg font-semibold ${isActive ? 'text-white underline decoration-crimson decoration-2 underline-offset-8' : 'text-navy-50'}`
+        `block py-3 text-lg font-semibold ${isActive ? 'text-white underline decoration-copper-500 decoration-2 underline-offset-8' : 'text-steel-100'}`
       }
     >
       {children}

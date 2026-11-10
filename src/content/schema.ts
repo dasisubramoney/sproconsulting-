@@ -18,7 +18,8 @@ export function organizationSchema() {
     description: company.summary,
     url: site.url,
     telephone: phoneE164,
-    // TODO: add `logo` and `image` once the official logo and photography are supplied.
+    logo: `${site.url}/images/brand/SPRO_logo_clean.png`,
+    // TODO: add `image` once project photography is supplied.
     address: {
       '@type': 'PostalAddress',
       streetAddress: `${address.building}, ${address.street}, ${address.suburb}`,

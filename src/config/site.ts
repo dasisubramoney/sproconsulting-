@@ -11,6 +11,6 @@ export const site = {
   defaultDescription:
     'Cape Town-based Electrical, Mechanical, Fire Protection, HVAC and Wet Services consulting engineers. Design, supervision and commissioning of complex capital projects.',
   locale: 'en_ZA',
-  // TODO: add a 1200×630 social share image at public/images/og-default.jpg, then set this.
-  defaultOgImage: undefined as string | undefined,
+  // 1200×630 social share image: the approved logo on the brand paper colour.
+  defaultOgImage: '/images/brand/og-image.jpg' as string | undefined,
 } as const;

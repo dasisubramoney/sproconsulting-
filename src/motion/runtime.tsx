@@ -9,6 +9,9 @@ import { setLenis } from './lenis';
 import { SCROLL_PROGRESS_ID } from './ScrollProgress';
 import { useReducedMotion } from './useReducedMotion';
 import { useReveal } from './useReveal';
+import { useDrawLines } from './useDrawLines';
+import { useInViewPlay } from './useInViewPlay';
+import { useTilt } from './useTilt';
 import { useSplitHeading } from './useSplitHeading';
 import { useCountUp } from './useCountUp';
 import { useParallax } from './useParallax';
@@ -62,6 +65,9 @@ export function PageMotion() {
   const [scope] = useState(() => ({ current: document.getElementById('main') }));
 
   useReveal(scope, reduced);
+  useDrawLines(scope, reduced);
+  useInViewPlay(scope, reduced);
+  useTilt(scope, reduced);
   useSplitHeading(scope, reduced);
   useCountUp(scope, reduced);
   useParallax(scope, reduced);

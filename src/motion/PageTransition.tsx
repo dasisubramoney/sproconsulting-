@@ -4,18 +4,19 @@ import { AnimatePresence, m, type Variants } from 'framer-motion';
 import { useHydrated } from '@/hooks/useHydrated';
 import { ScrollToTop } from '@/components/layout/ScrollToTop';
 import { useReducedMotion } from './useReducedMotion';
-import { bezier, coverTime, duration, slashAngle, stagger } from './tokens';
+import { bezier, coverTime, duration, stagger } from './tokens';
 
 const PageMotion = lazy(() => import('./runtime').then((mod) => ({ default: mod.PageMotion })));
 
 type Phase = 'idle' | 'cover' | 'reveal';
 
 /**
- * Route content with the diagonal slash transition:
- *  1. a crimson band, then a maroon band, sweep up across the screen (cover);
+ * Route content with the copper S-sweep transition (after the logo's ribbon):
+ *  1. a copper ribbon draws across the screen along an S-curve, a steel ribbon
+ *     and a copper highlight following it, until the screen is covered (cover);
  *  2. the old page unmounts under the cover and the new page mounts
  *     (scroll reset and focus move to its <h1> happen here, in ScrollToTop);
- *  3. the bands sweep off the top (reveal).
+ *  3. the ribbon's tail pulls away along the same S (reveal).
  * About 650 ms in total. With reduced motion, pages swap instantly.
  */
 export function PageTransition() {
@@ -50,64 +51,67 @@ export function PageTransition() {
           )}
         </m.div>
       </AnimatePresence>
-      {hydrated && <SlashWipe phase={phase} onRevealed={() => setPhase('idle')} />}
+      {hydrated && <SweepWipe phase={phase} onRevealed={() => setPhase('idle')} />}
     </>
   );
 }
 
-interface Band {
-  width: number;
-  height: number;
-  /** Vertical rise of the slash across the screen width. */
-  rise: number;
-  order: 0 | 1;
-}
+// The S, in a 100 × 100 box stretched to the viewport. It starts off-screen bottom
+// left and leaves top right, curling through the middle like the logo's ribbon.
+const S_PATH = 'M-30 118 C 25 118 22 58 50 50 C 78 42 75 -18 130 -18';
 
-/** A band between two parallel lines rising left to right, `top` and `bottom` at the right edge. */
-function band({ width, rise }: Band, top: number, bottom: number) {
-  return `polygon(0px ${top + rise}px, ${width}px ${top}px, ${width}px ${bottom}px, 0px ${bottom + rise}px)`;
-}
-
+// i = 0 copper ribbon (wide enough to cover the screen), 1 steel ribbon, 2 copper highlight.
 const variants: Variants = {
-  // Below the screen, zero height. Instant, so resetting after a reveal is never seen.
-  idle: (b: Band) => ({ clipPath: band(b, b.height, b.height), transition: { duration: 0 } }),
-  // Leading edge sweeps to the top: the screen is covered.
-  cover: (b: Band) => ({
-    clipPath: band(b, -b.rise, b.height),
-    transition: { duration: duration.wipe, ease: bezier.inOut, delay: b.order * stagger.bands },
+  // Nothing drawn. Instant, so resetting after a reveal is never seen.
+  idle: { pathLength: 0, pathOffset: 0, transition: { duration: 0 } },
+  // The ribbon draws along the S until the screen is covered; the lines on top follow it.
+  cover: (i: number) => ({
+    pathLength: 1,
+    pathOffset: 0,
+    transition: { duration: duration.wipe, ease: bezier.inOut, delay: i * stagger.bands },
   }),
-  // Trailing edge follows it off the top. Maroon (in front) leaves first.
-  reveal: (b: Band) => ({
-    clipPath: band(b, -b.rise, -b.rise),
-    transition: { duration: duration.wipe, ease: bezier.inOut, delay: (1 - b.order) * stagger.bands },
-  }),
+  // The tail pulls away along the same S, all three ribbons together.
+  reveal: {
+    pathLength: 0,
+    pathOffset: 1,
+    transition: { duration: duration.wipe, ease: bezier.inOut },
+  },
 };
 
-function SlashWipe({ phase, onRevealed }: { phase: Phase; onRevealed: () => void }) {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const rise = width * Math.tan((slashAngle * Math.PI) / 180);
-
+function SweepWipe({ phase, onRevealed }: { phase: Phase; onRevealed: () => void }) {
   return (
-    <div
-      aria-hidden="true"
-      className={`fixed inset-0 z-[90] ${phase === 'idle' ? 'pointer-events-none' : ''}`}
-    >
-      <m.div
-        className="absolute inset-0 bg-crimson"
-        custom={{ width, height, rise, order: 0 } satisfies Band}
-        variants={variants}
-        initial="idle"
-        animate={phase}
-        onAnimationComplete={(definition) => definition === 'reveal' && onRevealed()}
-      />
-      <m.div
-        className="absolute inset-0 bg-maroon"
-        custom={{ width, height, rise, order: 1 } satisfies Band}
-        variants={variants}
-        initial="idle"
-        animate={phase}
-      />
+    <div aria-hidden="true" className={`fixed inset-0 z-[90] ${phase === 'idle' ? 'pointer-events-none' : ''}`}>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full fill-none">
+        <m.path
+          d={S_PATH}
+          className="stroke-copper-500"
+          strokeWidth="170"
+          custom={0}
+          variants={variants}
+          initial="idle"
+          animate={phase}
+          onAnimationComplete={(definition) => definition === 'reveal' && onRevealed()}
+        />
+        <m.path
+          d={S_PATH}
+          className="stroke-steel-700"
+          strokeWidth="2.5"
+          custom={1}
+          variants={variants}
+          initial="idle"
+          animate={phase}
+        />
+        <m.path
+          d={S_PATH}
+          className="stroke-copper-300"
+          strokeWidth="0.6"
+          transform="translate(0 -3)"
+          custom={2}
+          variants={variants}
+          initial="idle"
+          animate={phase}
+        />
+      </svg>
     </div>
   );
 }

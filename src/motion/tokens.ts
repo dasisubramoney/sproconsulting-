@@ -6,7 +6,7 @@
 /** Seconds. */
 export const duration = {
   ui: 0.2,
-  /** One slash band crossing the screen in a route transition. */
+  /** The copper S-sweep crossing the screen in a route transition. */
   wipe: 0.24,
   reveal: 0.7,
   heading: 0.9,
@@ -44,8 +44,8 @@ export const distance = {
 /** ScrollTrigger start position for scroll reveals. */
 export const revealStart = 'top 88%';
 
-/** The brand slash angle in degrees, rising left to right (DESIGN.md "Motif"). */
-export const slashAngle = 20;
-
-/** Route transition: the screen is fully covered after this many seconds. */
-export const coverTime = duration.wipe + stagger.bands;
+/**
+ * Route transition: the copper ribbon has covered the screen after this many seconds,
+ * so the page can swap. The steel and highlight lines on top may still be finishing.
+ */
+export const coverTime = duration.wipe;

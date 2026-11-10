@@ -84,10 +84,10 @@ export function ContactForm() {
 
   if (status === 'success') {
     return (
-      <div ref={successRef} tabIndex={-1} role="status" className="border-l-4 border-navy bg-navy-50 p-8 outline-none">
-        <CircleCheck aria-hidden="true" className="h-8 w-8 text-navy" />
-        <h2 className="mt-4 text-h3 text-navy">Thank you — your message has been sent.</h2>
-        <p className="mt-2 text-ink-muted">One of our engineers will get back to you shortly.</p>
+      <div ref={successRef} tabIndex={-1} role="status" className="border-l-4 border-copper-500 bg-copper-50 p-8 outline-none">
+        <CircleCheck aria-hidden="true" className="h-8 w-8 text-copper-700" />
+        <h2 className="mt-4 text-h3 text-steel-700">Thank you — your message has been sent.</h2>
+        <p className="mt-2 text-steel-600">One of our engineers will get back to you shortly.</p>
         <button type="button" onClick={() => setStatus('idle')} className="btn-secondary mt-6">
           Send another message
         </button>
@@ -116,8 +116,8 @@ export function ContactForm() {
         </label>
       </p>
 
-      <p id="form-required-note" className="text-sm text-ink-muted">
-        Fields marked <span aria-hidden="true" className="text-crimson">*</span>
+      <p id="form-required-note" className="text-sm text-steel-600">
+        Fields marked <span aria-hidden="true" className="text-copper-700">*</span>
         <span className="sr-only">with an asterisk</span> are required.
       </p>
 
@@ -208,22 +208,22 @@ export function ContactForm() {
             onChange={(e) => set('consent', e.target.checked)}
             aria-invalid={errors.consent ? true : undefined}
             aria-describedby={errors.consent ? 'consent-error' : undefined}
-            className="mt-1 h-5 w-5 shrink-0 accent-navy"
+            className="mt-1 h-5 w-5 shrink-0 accent-copper-700"
           />
           <label htmlFor="consent" className="text-sm leading-relaxed text-ink">
             I agree that {company.shortName} may use these details to respond to my enquiry, as described in the{' '}
-            <Link to="/privacy" className="font-semibold text-navy underline hover:text-crimson">
+            <Link to="/privacy" className="font-semibold text-steel-700 underline hover:text-copper-800">
               privacy notice
             </Link>
-            . <span aria-hidden="true" className="text-crimson">*</span>
+            . <span aria-hidden="true" className="text-copper-700">*</span>
           </label>
         </div>
         {errors.consent && <ErrorText id="consent-error">{errors.consent}</ErrorText>}
       </div>
 
       {status === 'error' && (
-        <div role="alert" className="flex gap-3 border-l-4 border-crimson bg-crimson-50 p-4 text-sm text-ink">
-          <CircleAlert aria-hidden="true" className="h-5 w-5 shrink-0 text-crimson-700" />
+        <div role="alert" className="flex gap-3 border-l-4 border-error bg-error-50 p-4 text-sm text-ink">
+          <CircleAlert aria-hidden="true" className="h-5 w-5 shrink-0 text-error" />
           <p>
             Sorry, your message could not be sent. Please try again, or call us on{' '}
             <a href={`tel:${company.contact.phoneE164}`} className="font-semibold underline">
@@ -264,7 +264,7 @@ function inputProps(name: keyof ContactValues, error?: string, isTextarea = fals
     'aria-invalid': error ? true : undefined,
     'aria-describedby': describedBy || undefined,
     className: `block w-full rounded-sm border bg-white px-3 py-2.5 text-ink ${isTextarea ? '' : 'min-h-11'} ${
-      error ? 'border-crimson-700' : 'border-navy-200 focus:border-navy'
+      error ? 'border-error' : 'border-steel-400 focus:border-steel-700'
     }`,
   };
 }
@@ -286,12 +286,12 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-navy">
+      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-steel-700">
         {label}
         {required && (
           <>
             {' '}
-            <span aria-hidden="true" className="text-crimson">
+            <span aria-hidden="true" className="text-copper-700">
               *
             </span>
             <span className="sr-only">(required)</span>
@@ -300,7 +300,7 @@ function Field({
       </label>
       {children}
       {hint && (
-        <p id={`${id}-hint`} className="mt-1 text-right text-xs text-ink-muted">
+        <p id={`${id}-hint`} className="mt-1 text-right text-xs text-steel-600">
           {hint}
         </p>
       )}
@@ -311,7 +311,7 @@ function Field({
 
 function ErrorText({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <p id={id} className="mt-1.5 flex items-center gap-1.5 text-sm font-medium text-crimson-700">
+    <p id={id} className="mt-1.5 flex items-center gap-1.5 text-sm font-medium text-error">
       <CircleAlert aria-hidden="true" className="h-4 w-4 shrink-0" />
       {children}
     </p>

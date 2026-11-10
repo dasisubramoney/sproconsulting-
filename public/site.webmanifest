@@ -4,7 +4,11 @@
   "description": "Sustainable Innovation — Engineering Solutions",
   "start_url": "/",
   "display": "browser",
-  "background_color": "#FFFFFF",
-  "theme_color": "#252B72",
-  "icons": [{ "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" }]
+  "background_color": "#F7F5F2",
+  "theme_color": "#2B3238",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ]
 }

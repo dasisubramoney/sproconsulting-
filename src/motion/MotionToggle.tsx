@@ -21,17 +21,17 @@ export function MotionToggle() {
       <span
         aria-hidden="true"
         className={`relative inline-block h-4 w-7 rounded-full border transition-colors ${
-          reduced ? 'border-white bg-white' : 'border-navy-200 bg-transparent'
+          reduced ? 'border-white bg-white' : 'border-steel-400 bg-transparent'
         }`}
       >
         <span
           className={`absolute top-0.5 h-2.5 w-2.5 rounded-full transition-transform ${
-            reduced ? 'left-0.5 translate-x-3 bg-navy' : 'left-0.5 bg-navy-200'
+            reduced ? 'left-0.5 translate-x-3 bg-ink' : 'left-0.5 bg-steel-200'
           }`}
         />
       </span>
       Reduce motion
-      {system && <span className="text-navy-200">(device setting)</span>}
+      {system && <span className="text-steel-300">(device setting)</span>}
     </button>
   );
 }

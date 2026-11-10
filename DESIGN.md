@@ -3,74 +3,129 @@
 Source of truth for the website's visual language. Tokens live in
 [`tailwind.config.ts`](tailwind.config.ts); this document explains how to use them.
 
-Derived from the S-PRO Company & Sustainability Profile (PDF). Tagline:
-**Sustainable Innovation — Engineering Solutions.**
+Derived from the approved S-PRO logo ([`public/images/brand/SPRO_logo_clean.png`](public/images/brand/SPRO_logo_clean.png)):
+a copper ribbon forming an "S" sweeping past charcoal steel towers, over architectural
+sketch lines, with "PRO" in heavy charcoal and "CONSULTING ENGINEERS" in widely tracked
+capitals above a thin copper rule. Tagline: **Sustainable Innovation — Engineering Solutions.**
 
-Tone: confident, technical, clean, corporate — a premium engineering consultancy,
-not a template.
+Feel: warm metallic copper against cool charcoal steel. Architectural, premium, calm —
+an architect's drawing set and brushed metal.
 
 ---
 
 ## Colour
 
+Sampled from the logo (charcoal `#2F373C`, steel `#5D6771`, copper `#7C5234`–`#D3AA80`)
+and set to the approved values below.
+
 | Token | Hex | Role |
 |---|---|---|
-| `navy` / `navy-700` | `#252B72` | Primary. Headings, dark sections, header/footer. *Approximate — TODO confirm against the vector logo.* |
-| `crimson` / `crimson-600` | `#D92B25` | Accent. Primary buttons, focus rings, the slash motif. |
-| `crimson-700` | `#B5221D` | Primary button hover. |
-| `maroon` | `#8B2323` | Secondary accent. Eyebrow labels, second slash band. |
-| `ink` | `#141840` | Body text on light. |
-| `ink-muted` | `#4A4F6A` | Secondary text on light. |
-| `surface` / `surface-subtle` / `surface-muted` | `#FFFFFF` / `#F4F5F8` / `#E8EAF0` | Backgrounds, cards, borders. |
-| `navy-50…950` | scale | Tints for text on navy (`navy-100`, `navy-200`) and borders. |
+| `ink` | `#2B3238` | Primary text; dark sections (footer, stats band, mobile menu) |
+| `paper` | `#F7F5F2` | Page background |
+| `white` | `#FFFFFF` | Cards, heroes, contrast sections |
+| `steel-700` | `#4D5B68` | Headings on light backgrounds, secondary buttons |
+| `steel-600` | `#586572` | Secondary text on light |
+| `steel-500` | `#636F7B` | Icons, sketch hairlines |
+| `steel-400` | `#828C95` | Form field borders (non-text, 3.42 : 1) |
+| `steel-200` | `#D5DADF` | Hairlines, dividers, card borders |
+| `copper-700` | `#88542F` | Small copper text and links on light; primary button background |
+| `copper-600` | `#9E683C` | Primary button hover |
+| `copper-500` | `#B37B48` | Main brand accent: large headings, rules, graphics, focus ring |
+| `copper-300` | `#CB9C70` | Accents and labels on `ink`; focus ring on dark |
+| `copper-100` | `#D8B492` | Thin rules, text selection, subtle fills |
+| `water` / `water-300` | `#7E97A9` / `#B4C4D0` | Graphics that must read as water only (tank levels, the Sustainability pipe); never text |
+| `error` / `error-50` | `#A33A2B` / `#F9ECEA` | Form errors only — always with an icon and text |
 
-### Contrast rules (WCAG 2.2 AA)
+`steel` and `copper` each have a full 50–900 scale in the Tailwind theme.
+
+### Contrast (WCAG 2.2 AA) — measured
 
 | Combination | Ratio | Use |
 |---|---|---|
-| navy on white | ≈ 12.6 : 1 | ✅ any text |
-| ink-muted on white | ≈ 8 : 1 | ✅ any text |
-| maroon on white | ≈ 8.9 : 1 | ✅ any text |
-| crimson on white | ≈ 4.9 : 1 | ✅ text ≥ 14px; prefer for links, eyebrows, small accents |
-| white on crimson | ≈ 4.9 : 1 | ✅ button labels |
-| white / navy-100 / navy-200 on navy | ≥ 6.6 : 1 | ✅ any text |
-| **crimson on navy** | ≈ 2.6 : 1 | ❌ **never for text or icons.** Decorative shapes only (slashes, rules). |
-| **maroon on navy** | ≈ 1.5 : 1 | ❌ decorative only |
+| ink on white / paper | 12.99 / 11.94 : 1 | ✅ any text |
+| steel-700 on white / paper | 6.97 / 6.41 : 1 | ✅ any text |
+| steel-600 on white / paper | 5.97 / 5.48 : 1 | ✅ any text |
+| steel-500 on white / paper | 5.13 / 4.72 : 1 | ✅ any text (prefer steel-600 for body) |
+| copper-700 on white / paper | 6.26 / 5.75 : 1 | ✅ small copper text and links |
+| **copper-500 on white / paper** | 3.59 / 3.30 : 1 | ⚠️ **large text only** (24px+, or 19px bold+), rules, icons, graphics. Never body text or small links. |
+| white on copper-700 | 6.26 : 1 | ✅ primary button |
+| white on copper-600 | 4.67 : 1 | ✅ primary button hover |
+| **white on copper-500** | 3.59 : 1 | ❌ not for button labels |
+| white / steel-200 on ink | 12.99 / 9.23 : 1 | ✅ any text |
+| copper-300 / copper-100 on ink | 5.28 / 6.72 : 1 | ✅ accents, labels, figures on dark |
+| **steel-500 on ink** | 2.53 : 1 | ❌ never text on dark |
+| error on white / paper / error-50 | 6.57 / 6.04 / 5.70 : 1 | ✅ error messages |
+| ink on copper-100 | 6.72 : 1 | ✅ text selection |
+| Focus ring: copper-500 on paper / copper-300 on ink | 3.30 / 5.28 : 1 | ✅ non-text 3 : 1 |
 
-On dark (navy) surfaces, add the `on-dark` class so focus rings switch from crimson to white.
+On dark (`ink`) surfaces, add the `on-dark` class so focus rings switch to `copper-300`.
+Use dark sections sparingly — footer, stats band, mobile menu, and at most one or two
+high-impact sections per page. Copper should glow against them.
 
 ---
 
 ## Typography
 
-Montserrat Variable, self-hosted via `@fontsource-variable/montserrat` (no font CDN, so the CSP stays strict).
+Montserrat Variable, self-hosted via `@fontsource-variable/montserrat` (no font CDN, so the
+CSP stays strict). Its heavy weights match the logo's "PRO".
 
 | Token | Size | Use |
 |---|---|---|
-| `text-display` | clamp(2.5rem → 4.75rem), 700 | Home hero only |
-| `text-h1` | clamp(2rem → 3.25rem), 700 | One per page |
-| `text-h2` | clamp(1.625rem → 2.375rem), 700 | Section headings |
+| `text-display` | clamp(2.5rem → 4.75rem), **800** | Home hero only |
+| `text-h1` | clamp(2rem → 3.25rem), **800** | One per page |
+| `text-h2` | clamp(1.625rem → 2.375rem), 700 | Section headings (`steel-700`) |
 | `text-h3` | 1.25rem, 600 | Card / sub-section headings |
-| `text-eyebrow` | 0.75rem, 600, +0.18em tracking, uppercase | Labels above headings (`.eyebrow` = maroon) |
+| `text-eyebrow` | 0.75rem, 600, **+0.3em** tracking, uppercase | Section labels, like "CONSULTING ENGINEERS" (`.eyebrow` = copper-700) |
 | body | 1rem / 1.125rem, 400, relaxed leading | Max line length `max-w-prose` (42rem) |
 
-Hero secondary lines use weight 300 (`font-light`), echoing the profile cover's
-"ENGINEERING SOLUTIONS" line.
+Hero secondary lines use weight 300 (`font-light`) in `copper-500` — allowed because they
+are display size.
+
+**Loading (zero layout shift):** Montserrat is declared in `src/styles/index.css` with
+`font-display: optional` and preloaded (`scripts/prerender.mjs`). If the font isn't ready
+within ~100 ms the page uses `Montserrat Fallback` — Arial / Arial Bold scaled per weight
+band (400, 600, 700, 800) — and never swaps, so text can't move. Trade-off, measured: on a
+first visit over mobile data the whole visit renders in the fallback (the site navigates
+without reloading); once the font is cached, every later visit uses Montserrat. Keep the
+fallback metrics tuned so the fallback still looks right.
 
 ---
 
-## Motif: the diagonal slash
+## Logo
 
-The profile's signature is a bold **crimson band with a maroon band beside it**,
-cutting diagonally across the page. On the web we redraw it as geometry, not
-stock-photo overlays:
+- Use the approved file only: [`SPRO_logo_clean.png`](public/images/brand/SPRO_logo_clean.png),
+  through the `<Logo>` component, which serves trimmed, resized WebP/PNG copies with `srcset`.
+- **Never redraw, recolour, stretch or crop into the artwork.** It is raster: never show it
+  above its native size (largest web copy is 230 × 192).
+- Sizes: header 48px tall (mobile) / 64px (desktop); mobile menu 48px; footer 96px.
+- Clear space: at least the height of the "O" in "PRO" on every side.
+- On dark (`ink`) backgrounds, show it on a white panel (`<Logo onDark>`).
+  TODO: reversed logo from designer.
+- TODO: request vector logo (SVG/AI/EPS) from client.
+- The favicon and app icons use a **simplified copper "S" ribbon** (`public/favicon.svg`) —
+  a placeholder awaiting client approval, not part of the logo.
+- Social share image: `public/images/brand/og-image.jpg` (logo on paper, copper rule).
 
-- Two parallel bands: crimson in front, maroon behind/below, separated by a small gap.
-- Angle: **-18° to -24°** (rising left to right), consistent within a page.
-- Built with rotated `div`s or `clip-path` / inline SVG. Always `aria-hidden="true"` and `pointer-events-none`.
-- Used once per major section at most: page heroes, footer, mobile drawer, 404, CTA bands.
-- Over photography: the slash crops the image (clip-path), it doesn't sit on it as a translucent overlay.
-- Never put text on top of a slash band.
+---
+
+## Motif
+
+The old red/maroon diagonal slash is **retired**. Elements taken from the logo replace it
+(built in rebrand phase 3; components in `src/components/ui/` and `src/components/sections/`):
+
+- **The copper sweep:** a curved ribbon based on the logo's "S", used for the page transition,
+  section dividers and image-mask edges.
+- **Sketch construction lines:** thin `steel-500` hairlines at low opacity — partial circles,
+  crosshair marks, dimension ticks, ground lines that overshoot their edges. Quiet background
+  detail on the hero and section headings, drawn on with DrawSVG.
+- **The copper rule:** a thin copper line under section labels, echoing the line under
+  "CONSULTING ENGINEERS".
+- **Tracked capitals:** section labels at +0.3em (`text-eyebrow`).
+
+Rules: use with restraint; hairlines never compete with content; never put text on a
+graphic; always `aria-hidden="true"` and `pointer-events-none`.
+
+Where they appear: `<HeroBlueprint>` (home hero), `<SketchLines>` (interior heroes, 404), `<Eyebrow>` (every section label: copper rule plus a steel registration crosshair), `<SweepDivider>` (call-to-action band, mobile menu, dark panels), the S-sweep page transition, the intro and team avatars. Above the fold they draw with CSS; below the fold with GSAP (DrawSVG / scaleX).
 
 ---
 
@@ -80,14 +135,16 @@ stock-photo overlays:
 - Breakpoints: Tailwind defaults; the design is checked from **360px** upward.
 - Vertical rhythm: sections `py-16` (mobile) to `py-24` (desktop).
 - Corners: square or `rounded-sm` — engineering-precise, never pill-shaped.
-- Elevation: `shadow-card` only; prefer borders (`surface-muted`) over shadows.
+- Elevation: `shadow-card` only; prefer borders (`steel-200`) over shadows.
 
 ## Components
 
-- Buttons: `.btn-primary` (crimson), `.btn-secondary` (navy outline), `.btn-on-dark` (white outline on navy). Min height 44px (target size).
-- Links in body copy: navy, underlined; crimson on hover.
+- Buttons: `.btn-primary` (copper-700, white text; hover copper-600), `.btn-secondary` (steel-700 outline on white), `.btn-on-dark` (copper-300 outline on ink). Min height 44px (target size).
+- Links in body copy: steel-700, underlined; copper-800 on hover.
+- Form fields: steel-400 border, steel-700 on focus; errors in `error` with an icon and text.
 - Icons: `lucide-react`, 1.5–2px stroke, always `aria-hidden` with a text label nearby.
-- Team avatars: initials on a navy tile with a crimson corner slash, until consented photos are supplied.
+- Team avatars: initials on an `ink` tile with a copper/steel corner band, until consented photos are supplied.
+- Selection: `copper-100` background, `ink` text.
 
 ## Motion
 
@@ -100,10 +157,10 @@ Everything lives in [`src/motion/`](src/motion/).
 | Token | Value | Use |
 |---|---|---|
 | `duration.ui` | 200 ms | Hover, focus, toggles |
-| `duration.wipe` | 240 ms | One slash band crossing the screen (route transition) |
+| `duration.wipe` | 240 ms | The copper S-sweep crossing the screen (route transition) |
 | `duration.reveal` | 700 ms | Content fading up |
 | `duration.heading` | 900 ms | Heading lines rising from their mask |
-| `duration.draw` | 1.1 s | Slash bands and image wipes drawing in |
+| `duration.draw` | 1.1 s | Sketch lines, rules and image wipes drawing in |
 | `duration.count` | 1.6 s | Number count-ups |
 | `ease.out` / `bezier.out` | `power3.out` / `cubic-bezier(0.22, 1, 0.36, 1)` | Default for entrances (= Tailwind `ease-brand`) |
 | `ease.expo` | `expo.out` | Heading lines, image wipes |
@@ -111,7 +168,7 @@ Everything lives in [`src/motion/`](src/motion/).
 | `stagger.items` / `.lines` / `.bands` | 80 / 80 / 50 ms | Delay between siblings |
 | `distance.reveal` | 32 px | How far content rises |
 | `revealStart` | `top 88%` | When scroll reveals fire |
-| `slashAngle` | 20° | The slash, rising left to right |
+| `--d` / `--dur` (CSS) | classes `[--d:0.3s]` / `[--dur:0.45s]` | Delay / duration for the CSS draw classes `draw`, `draw-fill`, `draw-rise`, `draw-pop`, `rule-intro` (index.css) |
 
 CSS keyframes in `src/styles/index.css` mirror these values; change both together.
 
@@ -122,8 +179,11 @@ All take a scope ref and the reduced-motion flag, and react to data attributes, 
 | Hook | Attribute | Effect |
 |---|---|---|
 | `useReveal` | `data-reveal-item` | Fades up in staggered batches |
-| | `data-reveal-image` | Revealed through an angled clip-path wipe (the slash angle) |
-| | `data-slash` | Section slash bands draw in, maroon after crimson |
+| | `data-reveal-image` | Revealed through a curved clip-path wipe (a circle growing from the bottom-left, after the copper sweep); a `data-reveal-mark` crosshair flashes at the corner. Use `<RevealImage>`. |
+| | `data-rule` | A copper rule or sweep, drawn from the left (scaleX) |
+| `useDrawLines` | `data-sketch` | An `<svg>` of construction lines (crosshairs, arcs, ticks) drawn on with DrawSVG |
+| `useInViewPlay` | `data-schematic` | Sets `data-inview` while on screen, so discipline schematics loop only when visible |
+| `useTilt` | `data-tilt` | Card follows the pointer in 3D, max 6° (desktop, fine pointer); clears on leave so the CSS focus tilt applies |
 | `useSplitHeading` | `data-split` | Heading rises line by line from a mask (SplitText `lines` + `mask`), then reverts to plain text. Static text only. |
 | `useCountUp` | `data-stat` | Number counts up once, then settles on the exact source text |
 | `useParallax` | `data-parallax="18"` | Layer drifts by that % as its section scrolls away. Put it on an untransformed wrapper. |
@@ -133,16 +193,31 @@ Only elements that **start below the viewport** get scroll reveals, so nothing v
 
 ### Site-wide effects
 
-- **First-visit intro** (`IntroOverlay`): the tower mark draws as blueprint line art, fills with brand colour, and the panel wipes away on the diagonal — about 1.2 s, once per browser session, skipped by any key or tap. Pure CSS, started before first paint by `public/motion-gate.js`; the page renders underneath, so it never delays LCP.
-- **Route transition** (`PageTransition`): a crimson band then a maroon band sweep up across the screen (clip-path), the page swaps underneath, and they sweep off the top — about 650 ms. Scroll resets and focus moves to the new page's `<h1>` while covered.
-- **Scroll progress** (`ScrollProgress`): a 4 px crimson bar with an angled leading edge along the top.
+- **First-visit intro** (`IntroOverlay`): drawn from the logo's elements — construction circle, crosshair, ticks and ground line draw on, the copper S ribbon traces in, steel towers rise from the ground line, then the paper panel lifts away — about 1.2 s, once per browser session, skipped by any key or tap. Pure CSS, started before first paint by `public/motion-gate.js`; the page renders underneath, so it never delays LCP.
+- **Route transition** (`PageTransition`): the copper S-sweep — a copper ribbon draws across the screen along an S-curve (a full-screen SVG path animated with `pathLength`), a steel ribbon and copper highlight following it; the page swaps underneath and all three ribbons pull away together along the same S — about 0.55–0.63 s from click to fully revealed (page swaps as soon as the copper covers the screen). Scroll resets and focus moves to the new page's `<h1>` while covered.
+- **Scroll progress** (`ScrollProgress`): a 3 px copper rule (copper-500 → copper-300) along the top, with a small steel crosshair marking its leading end.
+- **Home hero — "Blueprint to Reality"** (`HeroBlueprint` + lazy `HeroMotion`, home page only):
+  - A drafting grid (steel-200 on paper) drifts with the mouse (desktop, fine pointer) and on scroll.
+  - On load (CSS): steel construction hairlines, tower outlines and a hairline copper ribbon draw; callouts pop in on copper leader lines; the tagline rises word by word.
+  - On scroll (GSAP scrub): the building is built — steel planes rise, services runs appear, the solid copper ribbon sweeps in, a render plate is revealed through an S-curve mask, and the linework fades back. The built layers (`.bp-solid`) are hidden by CSS only while JS runs with motion on (`html[data-js]`, set by `public/motion-gate.js`); otherwise the finished drawing shows. TODO: client project render/photo for the plate.
+  - Magnetic CTAs (`data-magnetic`, desktop): buttons lean up to 6 px towards the pointer.
+- **Discipline schematics** (`<ServiceSchematic slug>`: home cards, Services cards, service-page heroes): steel-500 linework with the moving element in copper-500 — Electrical: current pulse with a copper-300 glow along busbar → breaker → load; Mechanical: meshing gears; Fire: sprinkler spray (half the droplets on small screens); HVAC: airflow through a duct curling out of a diffuser; Wet services: flow into a tank whose level rises (water tint). CSS loops on transform / opacity / stroke-dashoffset, attached only while playing (in view, or card hovered / focused); the markup is a complete static frame for no-JS and reduced motion.
+- **Sustainability — "Follow the Water"** (`<WaterRail>` / `<WaterStage>` in `WaterNetwork.tsx` + lazy `WaterMotion`, that page only):
+  - A steel-500 pipe in the left gutter (same x for pipe and nodes: the middle of the gutter, 7 px on phones) runs through five stages, one per section, ending at the last.
+  - Water (`water` with a `water-300` shimmer, clip-path reveal) is scrubbed so its leading edge sits at mid-viewport; droplets run into it (2 on phones, 4 on desktop). Shimmer and droplets loop only while the pipe is on screen (`data-flowing`).
+  - A stage lights (`data-lit`) when the water reaches its node: copper-300 ring, the drawing's stroke turns copper (steel → copper-500, or copper-300 on ink), and the section's eyebrow rule draws (these rules are skipped by `useReveal`). The storage-tank level scales up between its node and the next.
+  - Unlit / empty states are CSS gated on `html[data-js]:not([data-reduce-motion])`, so no-JS and reduced motion show the finished drawing.
+  - `<HouseRow>`: one house per household (50 per row), steel-200 base pattern with copper-500 copies grouped by diagonal, faded in as a wave. `<PopulationChart>`: steel-700 line drawn on scroll (DrawSVG scrub), copper-500 end point; only the 2030 end point is data.
+  - The 6.57 figure is copper-500, `tabular-nums`, and counts up with `data-stat`.
+- **Service cards** (`.service-card` + `<CardDecor>`): on hover or keyboard focus the card tilts (max 6°), a copper rule draws along the top edge, steel corner crosshairs appear and the schematic plays. No tilt with reduced motion.
+- **Primary button hover**: a copper-600 fill sweeps in along a curve from the bottom-left (CSS). copper-600, not copper-500: white text stays at 4.67 : 1.
 - **Smooth scroll**: Lenis, driven by `gsap.ticker` and feeding `ScrollTrigger.update`.
-- **Hero entrance**: CSS keyframes (`data-reveal="1|2|3"`, `<SlashBands intro>`), so it runs before any JS. During the intro it waits for the panel to clear.
+- **Hero entrance**: CSS keyframes (`data-reveal="1|2|3"`, the `draw` classes on `<HeroBlueprint>`, `<SketchLines intro>` and `<Eyebrow intro>`), so it runs before any JS. During the intro it waits for the panel to clear (`--intro-hold`).
 
 ### Loading
 
 - GSAP, ScrollTrigger, SplitText, `@gsap/react` and Lenis are in one lazy chunk (`runtime.tsx`), fetched after hydration. **Import `src/motion/gsap.ts` and the hooks only from lazily loaded modules**, never from eager code.
-- Page-specific plugins (DrawSVG, MorphSVG, Flip) are registered in the page modules that use them.
+- DrawSVG is registered with the shared plugins (sketch lines appear on every page). Page-specific plugins (MorphSVG, Flip) are registered in the page modules that use them.
 - Framer Motion (`LazyMotion` + `m.*` only) handles the route transition and the mobile drawer.
 
 ### Reduced motion
@@ -169,4 +244,4 @@ Only elements that **start below the viewport** get scroll reveals, so nothing v
 
 ## Dark mode
 
-Not in scope for v1. Tokens are named semantically (`ink`, `surface`) so a dark theme can be added later.
+Not in scope for v1. Tokens are named semantically (`ink`, `paper`, `steel`, `copper`) so a dark theme can be added later.

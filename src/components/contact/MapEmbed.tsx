@@ -18,7 +18,7 @@ export function MapEmbed() {
 
   return (
     <div>
-      <div className="relative aspect-[4/3] w-full overflow-hidden border border-surface-muted bg-surface-subtle sm:aspect-video">
+      <div className="relative aspect-[4/3] w-full overflow-hidden border border-steel-200 bg-white sm:aspect-video">
         {loaded ? (
           <iframe
             src={src}
@@ -30,8 +30,8 @@ export function MapEmbed() {
           />
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
-            <MapIcon aria-hidden="true" className="h-10 w-10 text-navy-300" strokeWidth={1.5} />
-            <p className="max-w-xs text-sm text-ink-muted">
+            <MapIcon aria-hidden="true" className="h-10 w-10 text-steel-300" strokeWidth={1.5} />
+            <p className="max-w-xs text-sm text-steel-600">
               The map is provided by OpenStreetMap. Loading it shares your IP address with them.
             </p>
             <button type="button" onClick={() => setLoaded(true)} className="btn-secondary">
@@ -40,7 +40,7 @@ export function MapEmbed() {
           </div>
         )}
       </div>
-      <ExternalLink href={fullMap} className="mt-3 inline-block text-sm font-semibold text-navy underline hover:text-crimson">
+      <ExternalLink href={fullMap} className="mt-3 inline-block text-sm font-semibold text-steel-700 underline hover:text-copper-800">
         Open in OpenStreetMap<span className="sr-only"> (opens in a new tab)</span>
       </ExternalLink>
     </div>

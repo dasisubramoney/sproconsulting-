@@ -62,7 +62,7 @@ function PageFallback() {
   return (
     <div className="container-page min-h-[100svh] py-24" role="status" aria-live="polite">
       <span className="sr-only">Loading page…</span>
-      <div aria-hidden="true" className="h-1 w-24 animate-pulse bg-crimson" />
+      <div aria-hidden="true" className="h-1 w-24 animate-pulse bg-copper-500" />
     </div>
   );
 }

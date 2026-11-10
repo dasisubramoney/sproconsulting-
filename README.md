@@ -9,7 +9,7 @@ Source for **sproconsulting.co.za**, the website of S-PRO Consulting Engineers (
 | Doc | What's in it |
 |---|---|
 | This README | Running, building, deploying, editing content, open TODOs |
-| [DESIGN.md](DESIGN.md) | Colours, contrast rules, typography, the diagonal-slash motif, motion rules |
+| [DESIGN.md](DESIGN.md) | Colours, contrast rules, typography, logo usage, the copper-sweep and sketch-line motif, motion rules |
 | [netlify.toml](netlify.toml) | Build settings, security headers (CSP), caching, old-site redirects |
 
 ---
@@ -35,7 +35,7 @@ The rebuild was delivered in six phases. Everything below is in this repository 
 
 **1. Setup**
 - Vite + React 18 + TypeScript project with Tailwind, React Router 7 (lazy-loaded routes), Framer Motion, GSAP + ScrollTrigger, Lenis and react-helmet-async. All dependency versions are pinned exactly.
-- Design tokens (navy, crimson, maroon, ink, surface; Montserrat type scale) in [tailwind.config.ts](tailwind.config.ts), documented with contrast rules in [DESIGN.md](DESIGN.md).
+- Design tokens (originally navy, crimson and maroon; replaced by the copper / steel rebrand below; Montserrat type scale) in [tailwind.config.ts](tailwind.config.ts), documented with contrast rules in [DESIGN.md](DESIGN.md).
 - Montserrat self-hosted via `@fontsource-variable/montserrat` (no font CDN).
 - [netlify.toml](netlify.toml) with build settings, security headers and caching; `.gitignore` excludes `.env*` files.
 
@@ -58,7 +58,7 @@ The rebuild was delivered in six phases. Everything below is in this repository 
 - Per-page titles, descriptions, canonical URLs, Open Graph tags and JSON-LD; `sitemap.xml` and `robots.txt`.
 
 **4. Motion and polish**
-- The brand's diagonal "slash" bands, drawn in on page heroes.
+- The brand's diagonal "slash" bands, drawn in on page heroes (retired in the rebrand; see below).
 - Hero text rises in with CSS keyframes; below-the-fold cards, headings and slashes reveal on scroll with GSAP; stats count up.
 - Smooth scrolling with Lenis.
 - All motion switches off when the visitor has "reduce motion" turned on, and no content depends on an animation to become visible.
@@ -82,15 +82,140 @@ A second piece of work gives the site its own motion identity: design on paper �
 
 **Phase 1 — Global motion system (done)**
 - All motion code now lives in [src/motion/](src/motion/): shared timing tokens, the hooks `useReveal`, `useSplitHeading`, `useCountUp`, `useParallax` and `useReducedMotion`, and the site-wide effects. Documented in [DESIGN.md → Motion](DESIGN.md#motion).
-- **Page transitions:** on navigation, a crimson band then a maroon band sweep diagonally across the screen, the new page swaps in underneath, and the bands sweep away (about 650 ms). Focus moves to the new page's heading for screen readers.
+- **Page transitions:** on navigation, a copper band then a steel band (originally crimson and maroon) sweep diagonally across the screen, the new page swaps in underneath, and the bands sweep away (about 650 ms). Focus moves to the new page's heading for screen readers.
 - **First-visit intro:** the tower mark draws itself as blueprint lines, fills with brand colour and slides away on the diagonal (about 1.2 s), once per browser session. Any key or tap skips it. The page loads underneath, so it doesn't slow the site down. It uses the placeholder logo until the official artwork is supplied.
 - **Headings** rise line by line as they scroll into view, and content blocks fade up in sequence. An angled image wipe is ready for when photos are added.
-- **Scroll progress:** a thin crimson bar with an angled edge along the top of the page.
+- **Scroll progress:** a thin copper bar with an angled edge along the top of the page.
 - **"Reduce motion" switch** in the footer, remembered on the visitor's device. With it on, or with reduced motion set in the device's settings, there is no intro, no page wipe, no smooth scrolling and no scroll animations; content is simply there.
 - GSAP (now including SplitText via `@gsap/react` and `useGSAP`) and Lenis load in one separate file after the page is interactive. The code needed for the first paint got 3.7 KB *smaller* (117.0 → 113.3 KB gzipped).
 - Tested: no console errors or CSP violations under `npm run preview` (desktop, mobile, reduced motion, JavaScript off). Lighthouse mobile performance 99–100 on a quiet machine, CLS 0.
 
-**Still to do:** Phase 2 home hero "Blueprint to Reality" · Phase 3 animated discipline icons · Phase 4 Sustainability "Follow the Water" · Phase 5 projects timeline and map · Phase 6 stats, team and details · Phase 7 cross-browser QA and a full "Motion system" README section.
+**Phase 1 additions after the rebrand (done)**
+- `useDrawLines`: a new hook that draws sketch lines with DrawSVG as they scroll into view.
+- The scroll-progress line now has a small crosshair marking its leading end.
+- `<RevealImage>`: images reveal through a curved wipe while a hairline crosshair flashes at one corner. It's ready for when photos are supplied.
+
+**Phase 2: home hero, "Blueprint to Reality" (done)**
+- **Drafting grid:** the hero sits on a faint drafting grid that shifts slightly with the mouse (desktop) and on scroll.
+- **On load:** the building drawing appears as a blueprint: steel hairlines, a copper outline of the ribbon, and the four service callouts on copper leader lines. The tagline rises word by word.
+- **As you scroll, the building is built:**
+  - the steel towers rise;
+  - the fire, HVAC, water and electrical runs appear;
+  - the solid copper ribbon sweeps in;
+  - a "render" panel is revealed behind the towers along an S-curve;
+  - the linework fades back.
+- **The render panel is a placeholder.** It's a tinted panel until the client supplies a project photo or render (TODO).
+- **Hero buttons:** they lean slightly towards the pointer on desktop.
+- **Primary button hover:** every primary button now fills with a lighter copper along a curve on hover. The fill is copper-600, not the brief's copper-500, so white text stays above the AA contrast minimum.
+- **Without JavaScript, or with reduced motion,** the finished building is shown straight away.
+- **Small download cost:** +0.4 KB on first load and +0.5 KB in the shared motion file, plus 1.0 KB that only the home page loads.
+- **Tested:**
+  - Lighthouse mobile, home page: Performance 98, Accessibility 100, CLS 0.
+  - axe: 0 violations on all 14 pages.
+  - No console errors or CSP violations.
+  - Headings wrap the same before and after the web font loads.
+
+**Phase 3: discipline animations (done)**
+- **Each discipline has its own small animated drawing:** steel lines with a moving copper part.
+  - Electrical: a current pulse runs from the busbar through the breaker to the load.
+  - Mechanical: two gears turn together.
+  - Fire: a sprinkler sprays.
+  - HVAC: air flows through a duct and curls out of a diffuser.
+  - Wet services: water flows into a tank and the level rises.
+- **Where they appear:** the home-page discipline cards, the Services page cards and the top of each service page. They loop gently only while on screen.
+- **Hovering over a service card, or tabbing to it with the keyboard,** tilts the card slightly (at most 6°). A copper line draws along its top edge, crosshairs appear in the corners, and the drawing plays.
+- **Phones, reduced motion and no JavaScript:**
+  - Phones show half the spray particles and don't tilt.
+  - With reduced motion or without JavaScript, each drawing shows as a still picture.
+- **Small download cost:** +0.6 KB on first load, +0.4 KB in the shared motion file, and the drawings themselves are 1.0 KB.
+- **Tested in Chrome and Firefox:**
+  - Drawings play only while on screen.
+  - Hover and keyboard focus work the same way.
+  - Reduced motion and phones behave as above.
+  - axe: 0 violations on all 14 pages.
+  - No console errors or CSP violations.
+  - Lighthouse Performance 99 on Home and Services.
+
+**Font loading changed to remove a layout shift.** At some phone widths, text wrapped differently in the backup font than in Montserrat. When the web font arrived, the header moved (CLS 0.015 on /services at 412 px).
+- **The fix:** Montserrat now loads with `font-display: optional` and is downloaded early. The browser waits about 0.1 s for it. If it hasn't arrived, the page uses the size-matched backup font and never switches, so text can't move.
+- **Result:** CLS is 0 in all 12 Lighthouse runs on /services, /privacy, /services/mechanical and /.
+- **Trade-off, measured:**
+  - On a first visit over mobile data (emulated fast or slow 4G), the whole visit renders in the backup font. The site moves between pages without reloading, so it doesn't switch part-way through.
+  - On the next visit the font is cached and every page uses Montserrat.
+  - On a fast connection, it's Montserrat from the start.
+- **Known console warning:** Chrome logs a harmless "preloaded but not used" warning when a page is reloaded in the same tab.
+
+**Phase 4: Sustainability, "Follow the Water" (done)**
+- **A steel pipe runs down the left edge of the Sustainability page** through five stages, one per section: Rainwater catchment (climate) → Filtration (carbon footprint) → Storage tank (our offering) → Grey water reuse (water systems) → Building (overall vision).
+- **As you scroll, water flows down the pipe.** Its leading edge stays level with the middle of the screen, with droplets running into it. When it reaches a stage, the stage lights up: a copper ring appears, its small drawing turns copper, and the copper rule under that section's label draws in. Scrolling back drains it again.
+- **The storage tank fills** as the water travels on from it to the next stage.
+- **On wide screens** each stage shows a small drawing (rain on a roof, a filter, a tank, a return loop, a building). Above 1536 px the stage names also appear beside the pipe. On phones the stages are simple dots, with half the droplets.
+- **6.57 million litres** is now set large in copper and counts up when it scrolls into view. Its width doesn't change while counting.
+- **500 small houses**, one per household, sit under the figure and fill from steel to copper in a diagonal wave.
+- **Population chart:** a small line chart under "65–67 million" draws as you scroll, ending in a copper point at 2030. The site gives only the 2030 figure, so the line is an illustrative rising trend with no other values on it.
+- **Without JavaScript or with reduced motion** you see the finished picture: pipe full, every stage lit, all houses copper, the final number.
+- **No content changed.** The stage names come from the brief. The sections gained a full-width wrapper so the pipe can line up with them.
+- **Small download cost:** the page's motion file is 1.2 KB gzipped and loads only on this page. The first-load bundle is unchanged.
+- **Tested in Chrome and Firefox, at 1440 px and 390 px:**
+  - Each stage lights exactly when the water reaches it, and only up to that stage.
+  - The leading edge tracks mid-screen to the pixel, and the pipe ends at the last stage.
+  - The tank is half full halfway to the next stage. The counter, house wave and chart behave as described.
+  - Reduced motion and no-JS show the finished picture.
+  - CLS 0 over the whole scroll.
+  - Site-wide: axe 0 violations on 14 pages at both widths, no console errors or CSP violations.
+
+**Still to do (motion pass):** Phase 5 projects timeline and map · Phase 6 stats, team and details · Phase 7 cross-browser QA and a full "Motion system" README section.
+
+### Rebrand to the approved logo
+
+The client approved a new logo: a copper "S" ribbon sweeping past charcoal steel towers. The site is being re-themed to match, in four phases.
+
+**Phase 1: audit and proposal (done).** The audit found 235 old colour references in 37 files and 8 files using the red slash motif. The colour scale and contrast table were approved, along with the plans for the transition and hero.
+
+**Phase 2: colours and global look (done)**
+- **The approved logo** is in `public/images/brand/`. The header, mobile menu and footer use resized copies of it; the artwork itself is unmodified. It's also the logo in the search-engine data.
+- **New colours**, sampled from the logo: `ink` charcoal, `paper` off-white, and steel and copper scales, plus a separate error colour for forms. Every colour combination in use is checked against WCAG AA; see the [DESIGN.md](DESIGN.md#colour) contrast table.
+- **Light and dark:** the old navy page headers are now light. The dark sections are the footer, the stats band and the mobile menu, plus About's mission and Sustainability's water-saving sections. Copper stands out against them.
+- **Buttons and links:** buttons are copper with white text, and secondary buttons have a steel outline. Focus rings are copper. Form fields have steel borders, and errors show in their own colour with an icon and text.
+- **Typography:** big headings are heavier (800) to match "PRO". Section labels are widely spaced capitals, like "CONSULTING ENGINEERS".
+- **Text no longer jumps when the font loads.** There is now a size-matched fallback font for each weight, so text wraps the same before and after Montserrat arrives.
+- **Favicon, app icons, browser theme colour and social share image** are rebuilt in the new palette. The favicon's simplified "S" mark is a placeholder that needs client approval.
+- **Zero old colour references** remain in the code (`src/`, `index.html`, `public/`). [DESIGN.md](DESIGN.md) is rewritten: palette, contrast, typography, logo usage rules and motif rules.
+- **Tested:** axe found 0 accessibility violations on every page at 390 and 1440 px. No console errors or CSP violations, and no layout shift above 0.001.
+
+**Phase 3: graphics and motion (done).** The red slash is gone everywhere. In its place are elements taken from the logo:
+- **Home hero, "Blueprint to Reality":** a hand-drawn line drawing. First the construction lines draw: a circle, crosshairs, dimension ticks and a ground line. Then the steel towers rise and the copper S ribbon sweeps past them. The fire, HVAC, water and electrical runs appear inside the towers, and the four service callouts pop in with leader lines.
+- **Page transition:** a copper ribbon sweeps across the screen along an S-curve, then pulls away to reveal the next page (about 0.6 s).
+- **First-visit intro:** draws the logo's construction lines and copper S, then the towers rise and the panel lifts away.
+- **Section labels:** a thin copper rule underneath and a small steel crosshair, drawn on as you scroll.
+- **Interior pages and the 404 page:** quiet steel construction lines in the header.
+- **Copper sweep divider:** above the call-to-action band, on the dark home-page panel and at the foot of the mobile menu.
+- **Smaller details:** a curved image-reveal wipe, a plain copper scroll-progress rule, and a copper arc on the team initials tiles.
+- **Built to draw safely:** graphics above the fold draw with CSS, so they need no JavaScript and can't flicker. Below the fold, GSAP DrawSVG draws them. With reduced motion, everything appears complete straight away.
+- **Small download cost:** +1.2 KB on first load and +1.5 KB in the motion file. The hero drawing is about 2 KB.
+- **Tested:**
+  - axe: 0 accessibility violations on every page at 390 and 1440 px.
+  - No console errors, no CSP violations, and no layout shift above 0.001.
+  - The page transition finishes in under 0.7 s, and focus moves to the new page's heading.
+  - The drawings complete with JavaScript turned off.
+
+**Phase 4: QA (done).** Tested against a local server that behaves like Netlify, with compression and the real security headers.
+- **Old branding:** zero references to the old navy and red colours, and none to the slash, anywhere in the code.
+- **Accessibility:** axe (WCAG 2.2 AA, including colour contrast) found 0 violations on all 14 pages at 390 and 1440 px. Keyboard focus rings are copper: copper-500 on light backgrounds, copper-300 on dark.
+- **Lighthouse (mobile, median of 3 runs):**
+  - Performance is 98–99 on Home, About, Electrical, Sustainability, Projects and Contact, with CLS 0 everywhere. Every run plays the first-visit intro, so this is the worst case.
+  - Accessibility and SEO are 100 on every page.
+  - Best Practices shows 81 only because antivirus on the test PC (Kaspersky) inserts an `http://` script into every page. That won't happen on Netlify.
+- **Layout shift:** 0.001 or less on every page, scrolled top to bottom.
+- **Reduced motion:** with the device setting on, all 14 pages show everything at once, with no intro and no smooth scrolling. The footer switch does the same and is remembered.
+- **Browsers:** Chrome and Firefox 159 both pass. In both:
+  - Drawings complete on every page.
+  - The intro plays and clears.
+  - The page transition finishes and focus moves to the heading.
+  - The reduce-motion switch works.
+  - No console errors and no security-policy violations.
+- **Not tested:** Safari and iOS Safari, which don't run on Windows. Check them on a real iPhone and Mac on the Netlify deploy preview.
+- **Page transition:** about 0.55–0.63 s from click to the new page fully showing, with a worst case of 0.68 s, under the 0.7 s budget. To get there, the page now swaps as soon as the copper ribbon covers the screen, and all three ribbons pull away together.
 
 ---
 
@@ -132,7 +257,7 @@ src/
     layout/             header, footer, mobile menu, skip link
     sections/           page hero, CTA band, stats band, project card
     contact/            contact form, validation, click-to-load map
-    ui/                 small building blocks (logo, slash motif, tags, avatars…)
+    ui/                 small building blocks (logo, label, sketch lines, copper sweep, tags, avatars…)
   motion/             all animation: tokens, GSAP hooks, page transition, intro, reduce-motion switch
   hooks/              hydration, body scroll lock
   styles/index.css    Tailwind layers, fonts, entrance animations, intro animation
@@ -319,7 +444,7 @@ Lighthouse scores vary by a few points between runs. Re-measure on the Netlify d
 - Skip link, semantic landmarks, one `h1` per page, and visible focus rings everywhere.
 - Header menus work by keyboard (Escape closes and returns focus), and the mobile drawer keeps focus inside while open.
 - Touch targets are at least 24px.
-- Contrast rules are in [DESIGN.md](DESIGN.md#contrast-rules-wcag-22-aa). Crimson is never used for text on navy.
+- Contrast rules are in [DESIGN.md](DESIGN.md#contrast-wcag-22-aa--measured). `copper-500` is for large text, rules and graphics only; `steel-500` is never used for text on `ink`.
 
 **Reduced motion:** with the OS setting on, or the footer **Reduce motion** switch on, there is no intro or page wipe, smooth scrolling and scroll animations are off, and CSS transitions are near-instant. Content never depends on an animation to become visible.
 
@@ -342,7 +467,7 @@ Lighthouse scores vary by a few points between runs. Re-measure on the Netlify d
 | `/index.html → /` and `/services.html → /services` redirects | Not added | Both are real files now, and a forced redirect would risk a loop. The canonical tag handles the duplicate. |
 | Map provider unspecified | **OpenStreetMap**, click-to-load | More private than Google Maps, and only one origin in `frame-src`. |
 | `Permissions-Policy: interest-cohort=()` | Kept, plus `browsing-topics=()` | As requested. Note that Chrome logs an "unrecognised feature" warning for `interest-cohort`. Remove it if a clean console matters more. |
-| Three.js hero (optional) | Not used | The CSS/GSAP slash motif carries the brand without adding about 150 KB of JavaScript. |
+| Three.js hero (optional) | Not used | The hand-drawn SVG blueprint hero carries the brand without adding about 150 KB of JavaScript. |
 | Electrical / Mechanical lists | Swapped back from the PDF | The PDF has them reversed. Confirm with the client (see TODOs). |
 
 ---
@@ -367,8 +492,10 @@ Every item below is also marked `TODO` in the code (search the repo for `TODO`).
 
 ### Assets to supply
 
-- [ ] **Official S-PRO logo** (SVG preferred). Replace the placeholder in [Logo.tsx](src/components/ui/Logo.tsx) and [favicon.svg](public/favicon.svg), add `apple-touch-icon.png` (180×180) and `favicon.ico` ([index.html](index.html)), and add `logo` to the JSON-LD ([schema.ts](src/content/schema.ts)).
-- [ ] **Exact brand navy:** `#252B72` is sampled from the PDF; confirm it against the vector logo. [DESIGN.md](DESIGN.md), [tailwind.config.ts](tailwind.config.ts)
+- [x] **Approved S-PRO logo** in place: `public/images/brand/SPRO_logo_clean.png` (original), resized copies used by [Logo.tsx](src/components/ui/Logo.tsx), and `logo` in the JSON-LD ([schema.ts](src/content/schema.ts)).
+- [ ] **TODO: request vector logo (SVG/AI/EPS) from client.** The supplied logo is a raster PNG, so it can't be shown larger than its native size.
+- [ ] **TODO: reversed logo from designer** for dark backgrounds. Until then the footer and mobile menu show the full-colour logo on a white panel.
+- [ ] **Favicon and app icons** from the new brand: [favicon.svg](public/favicon.svg) is still the old placeholder; add `apple-touch-icon.png` (180×180) and `favicon.ico` ([index.html](index.html)). Any simplified "S" mark needs client approval.
 - [ ] **Social share image,** 1200×630 at `public/images/og-default.jpg`; then set `defaultOgImage`. [site.ts](src/config/site.ts)
 - [ ] **Project photography** (WebP/AVIF) in `public/images/projects/`. [projects.ts](src/content/projects.ts)
 - [ ] **Team photos, with each person's written consent (POPIA).** [team.ts](src/content/team.ts)

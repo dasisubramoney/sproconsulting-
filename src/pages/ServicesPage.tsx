@@ -3,7 +3,8 @@ import { ArrowRight, Check } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { PageHero } from '@/components/sections/PageHero';
 import { CtaBand } from '@/components/sections/CtaBand';
-import { ServiceIcon } from '@/components/ui/ServiceIcon';
+import { ServiceSchematic } from '@/components/ui/ServiceSchematic';
+import { CardDecor } from '@/components/ui/CardDecor';
 import { services } from '@/content/services';
 import { projects } from '@/content/projects';
 
@@ -26,30 +27,30 @@ export default function ServicesPage() {
             const projectCount = projects.filter((p) => p.disciplines.includes(service.slug)).length;
             return (
               <li key={service.slug} data-reveal-item>
-                <article className="group relative flex h-full flex-col border border-surface-muted bg-white p-8 transition-shadow hover:shadow-card">
-                  <span
-                    aria-hidden="true"
-                    className="absolute left-0 top-0 h-1 w-16 bg-crimson transition-all duration-300 ease-brand group-hover:w-full"
-                  />
+                <article
+                  className="service-card group flex h-full flex-col border border-steel-200 bg-white p-8 hover:shadow-card"
+                  data-tilt
+                >
+                  <CardDecor />
                   <div className="flex items-start justify-between gap-4">
-                    <ServiceIcon icon={service.icon} className="h-10 w-10 text-crimson" />
-                    <p className="text-right text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                    <ServiceSchematic slug={service.slug} className="h-16 w-16" />
+                    <p className="text-right text-xs font-semibold uppercase tracking-wider text-steel-600">
                       {projectCount} projects
                     </p>
                   </div>
-                  <h2 className="mt-6 text-h3 text-navy sm:text-2xl">{service.title}</h2>
-                  <p className="mt-2 leading-relaxed text-ink-muted">{service.summary}</p>
+                  <h2 className="mt-6 text-h3 text-steel-700 sm:text-2xl">{service.title}</h2>
+                  <p className="mt-2 leading-relaxed text-steel-600">{service.summary}</p>
                   <ul className="mt-6 grid gap-2 text-sm text-ink sm:grid-cols-2">
                     {service.capabilities.map((c) => (
                       <li key={c} className="flex gap-2">
-                        <Check aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-crimson" />
+                        <Check aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-copper-700" />
                         {c}
                       </li>
                     ))}
                   </ul>
                   <Link
                     to={`/services/${service.slug}`}
-                    className="mt-8 inline-flex items-center gap-1 self-start text-sm font-semibold text-navy hover:text-crimson"
+                    className="mt-8 inline-flex items-center gap-1 self-start text-sm font-semibold text-steel-700 hover:text-copper-800"
                   >
                     {service.title} in detail
                     <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" />

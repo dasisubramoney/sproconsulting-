@@ -6,6 +6,7 @@ import { CtaBand } from '@/components/sections/CtaBand';
 import { ProjectCard } from '@/components/sections/ProjectCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ServiceIcon } from '@/components/ui/ServiceIcon';
+import { ServiceSchematic } from '@/components/ui/ServiceSchematic';
 import { serviceSlugs, type ServiceSlug } from '@/config/routes';
 import { getService, services } from '@/content/services';
 import { projects } from '@/content/projects';
@@ -29,16 +30,16 @@ export default function ServiceDetailPage() {
     <>
       <Seo title={`${service.title} engineering`} description={service.summary} />
       <PageHero eyebrow="Services" title={`${service.title} engineering`} intro={service.summary}>
-        <ServiceIcon icon={service.icon} className="mt-8 h-12 w-12 text-navy-100" />
+        <ServiceSchematic slug={service.slug} className="mt-8 h-20 w-20" />
       </PageHero>
 
       <section aria-labelledby="capabilities-heading" className="container-page grid gap-12 py-20 sm:py-24 lg:grid-cols-2">
         <div>
           <SectionHeading id="capabilities-heading" eyebrow="Capabilities" title="What we design" />
-          <ul className="mt-8 divide-y divide-surface-muted border-y border-surface-muted">
+          <ul className="mt-8 divide-y divide-steel-200 border-y border-steel-200">
             {service.capabilities.map((c) => (
-              <li key={c} className="flex items-center gap-3 py-4 font-medium text-navy">
-                <Check aria-hidden="true" className="h-5 w-5 shrink-0 text-crimson" />
+              <li key={c} className="flex items-center gap-3 py-4 font-medium text-steel-700">
+                <Check aria-hidden="true" className="h-5 w-5 shrink-0 text-copper-700" />
                 {c}
               </li>
             ))}
@@ -46,7 +47,7 @@ export default function ServiceDetailPage() {
         </div>
 
         {service.systems && (
-          <div className="bg-surface-subtle p-8 sm:p-10">
+          <div className="bg-white p-8 sm:p-10">
             <SectionHeading
               eyebrow="Sustainable Innovation"
               title="Systems we specify"
@@ -54,7 +55,7 @@ export default function ServiceDetailPage() {
               intro={
                 <>
                   Part of our{' '}
-                  <Link to="/sustainability" className="font-semibold text-navy underline hover:text-crimson">
+                  <Link to="/sustainability" className="font-semibold text-steel-700 underline hover:text-copper-800">
                     Sustainable Innovation
                   </Link>{' '}
                   fire and wet services offering.
@@ -64,7 +65,7 @@ export default function ServiceDetailPage() {
             <ul className="mt-6 space-y-3 text-ink">
               {service.systems.map((s) => (
                 <li key={s} className="flex gap-3">
-                  <span aria-hidden="true" className="mt-2 h-2 w-2 shrink-0 bg-crimson" />
+                  <span aria-hidden="true" className="mt-2 h-2 w-2 shrink-0 bg-copper-500" />
                   {s}
                 </li>
               ))}
@@ -74,7 +75,7 @@ export default function ServiceDetailPage() {
       </section>
 
       {related.length > 0 && (
-        <section aria-labelledby="related-heading" className="bg-surface-subtle">
+        <section aria-labelledby="related-heading" className="bg-white">
           <div className="container-page py-20 sm:py-24">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
               <SectionHeading
@@ -99,7 +100,7 @@ export default function ServiceDetailPage() {
       )}
 
       <nav aria-labelledby="other-services-heading" className="container-page py-16">
-        <h2 id="other-services-heading" className="text-eyebrow uppercase text-maroon">
+        <h2 id="other-services-heading" className="text-eyebrow uppercase text-copper-700">
           Other disciplines
         </h2>
         <ul className="mt-6 flex flex-wrap gap-3">

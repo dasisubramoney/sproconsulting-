@@ -61,7 +61,7 @@ export default function ProjectsPage() {
 
   const hasFilters = year !== null || discipline !== null;
   const selectClass =
-    'mt-1 block min-h-11 w-full rounded-sm border border-navy-200 bg-white px-3 text-sm text-ink focus:border-navy';
+    'mt-1 block min-h-11 w-full rounded-sm border border-steel-400 bg-white px-3 text-sm text-ink focus:border-steel-700';
 
   return (
     <>
@@ -75,13 +75,13 @@ export default function ProjectsPage() {
         intro={`${projects.length} projects from ${projectYearRange.earliest} to ${projectYearRange.latest} — airports, hospitals, malls, stations, campuses and industrial facilities.`}
       />
 
-      <section aria-labelledby="filters-heading" className="z-30 border-b border-surface-muted bg-white/95 backdrop-blur sm:sticky sm:top-16 lg:top-20">
+      <section aria-labelledby="filters-heading" className="z-30 border-b border-steel-200 bg-white/95 backdrop-blur sm:sticky sm:top-16 lg:top-20">
         <div className="container-page grid grid-cols-2 gap-x-3 gap-y-3 py-4 sm:flex sm:items-end sm:gap-4">
           <h2 id="filters-heading" className="sr-only">
             Filter projects
           </h2>
           <div className="sm:w-48">
-            <label htmlFor={yearId} className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+            <label htmlFor={yearId} className="text-xs font-semibold uppercase tracking-wider text-steel-600">
               Year
             </label>
             <select id={yearId} value={year ?? ''} onChange={(e) => update('year', e.target.value)} className={selectClass}>
@@ -94,7 +94,7 @@ export default function ProjectsPage() {
             </select>
           </div>
           <div className="sm:w-56">
-            <label htmlFor={disciplineId} className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+            <label htmlFor={disciplineId} className="text-xs font-semibold uppercase tracking-wider text-steel-600">
               Discipline
             </label>
             <select
@@ -112,14 +112,14 @@ export default function ProjectsPage() {
             </select>
           </div>
           <div className="col-span-2 flex items-center justify-between gap-4 sm:ml-auto sm:justify-end">
-            <p role="status" aria-live="polite" className="text-sm text-ink-muted">
-              Showing <strong className="text-navy">{filtered.length}</strong> of {projects.length} projects
+            <p role="status" aria-live="polite" className="text-sm text-steel-600">
+              Showing <strong className="text-steel-700">{filtered.length}</strong> of {projects.length} projects
             </p>
             {hasFilters && (
               <button
                 type="button"
                 onClick={() => setParams(new URLSearchParams(), { replace: true, preventScrollReset: true })}
-                className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-navy hover:text-crimson"
+                className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-steel-700 hover:text-copper-800"
               >
                 <X aria-hidden="true" className="h-4 w-4" /> Clear filters
               </button>
@@ -130,13 +130,13 @@ export default function ProjectsPage() {
 
       <section aria-label="Projects by year" className="container-page py-16 sm:py-20">
         {groups.length === 0 ? (
-          <p className="py-12 text-center text-ink-muted">No projects match these filters.</p>
+          <p className="py-12 text-center text-steel-600">No projects match these filters.</p>
         ) : (
-          <ol className="relative space-y-14 border-l border-surface-muted pl-6 sm:pl-10">
+          <ol className="relative space-y-14 border-l border-steel-200 pl-6 sm:pl-10">
             {groups.map(([groupYear, items]) => (
               <li key={groupYear} className="relative">
-                <span aria-hidden="true" className="absolute -left-[1.85rem] top-2 h-3 w-3 bg-crimson sm:-left-[2.85rem]" />
-                <h2 className="text-h2 text-navy">{groupYear}</h2>
+                <span aria-hidden="true" className="absolute -left-[1.85rem] top-2 h-3 w-3 bg-copper-500 sm:-left-[2.85rem]" />
+                <h2 className="text-h2 text-steel-700">{groupYear}</h2>
                 <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {items.map((p) => (
                     // CSS fade-in runs when a card mounts, so cards revealed by a filter change fade in.

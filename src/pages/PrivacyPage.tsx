@@ -75,7 +75,7 @@ export default function PrivacyPage() {
             </p>
             <p>
               If you choose to load the map on our{' '}
-              <Link to="/contact" className="font-semibold text-navy underline hover:text-crimson">
+              <Link to="/contact" className="font-semibold text-steel-700 underline hover:text-copper-800">
                 contact page
               </Link>
               , your browser connects to OpenStreetMap, which will receive your IP address. The map does not load unless
@@ -110,7 +110,7 @@ export default function PrivacyPage() {
             </ul>
             <p>
               Information Regulator (South Africa):{' '}
-              <ExternalLink href="https://inforegulator.org.za/" className="font-semibold text-navy underline hover:text-crimson">
+              <ExternalLink href="https://inforegulator.org.za/" className="font-semibold text-steel-700 underline hover:text-copper-800">
                 inforegulator.org.za<span className="sr-only"> (opens in a new tab)</span>
               </ExternalLink>
             </p>
@@ -121,11 +121,11 @@ export default function PrivacyPage() {
             <p>To exercise your rights or ask about this notice, contact our Information Officer:</p>
             <ul className="space-y-1">
               <li>
-                Email: <ObfuscatedEmail className="font-semibold text-navy underline hover:text-crimson" />
+                Email: <ObfuscatedEmail className="font-semibold text-steel-700 underline hover:text-copper-800" />
               </li>
               <li>
                 Phone:{' '}
-                <a href={`tel:${phoneE164}`} className="font-semibold text-navy underline hover:text-crimson">
+                <a href={`tel:${phoneE164}`} className="font-semibold text-steel-700 underline hover:text-copper-800">
                   {phoneDisplay}
                 </a>
               </li>
@@ -140,7 +140,7 @@ export default function PrivacyPage() {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="space-y-4">
-      <h2 className="text-h3 text-navy sm:text-2xl">{title}</h2>
+      <h2 className="text-h3 text-steel-700 sm:text-2xl">{title}</h2>
       {children}
     </section>
   );
