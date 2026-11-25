@@ -4,6 +4,7 @@ import { ArrowRight, Check, CloudRain, Droplets, Gauge, Recycle } from 'lucide-r
 import { Seo } from '@/components/Seo';
 import { PageHero } from '@/components/sections/PageHero';
 import { CtaBand } from '@/components/sections/CtaBand';
+import { SustainabilityCutaway } from '@/components/sections/SustainabilityCutaway';
 import { WaterRail, WaterStage } from '@/components/sections/WaterNetwork';
 import { HouseRow } from '@/components/ui/HouseRow';
 import { PopulationChart } from '@/components/ui/PopulationChart';
@@ -36,7 +37,12 @@ export default function SustainabilityPage() {
         title="Sustainability"
         description="Reclaimed rainwater, grey water, borehole purification and renewable energy systems that reduce load on municipal water and electricity networks."
       />
-      <PageHero eyebrow="Sustainable innovation" title="Engineering for a water- and energy-stressed future" intro={sustainableInnovation.intro} />
+      <PageHero
+        eyebrow="Sustainable innovation"
+        title="Engineering for a water- and energy-stressed future"
+        intro={sustainableInnovation.intro}
+        aside={<SustainabilityCutaway className="w-[21rem]" />}
+      />
 
       {/* "Follow the Water": a pipe runs down the gutter through the five sections below. */}
       <div className="relative" data-water>

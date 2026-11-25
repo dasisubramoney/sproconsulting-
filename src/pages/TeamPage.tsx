@@ -1,6 +1,7 @@
 import { Compass, ExternalLink as ExternalLinkIcon, GraduationCap, Laptop } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { PageHero } from '@/components/sections/PageHero';
+import { TeamNetwork } from '@/components/sections/TeamNetwork';
 import { CtaBand } from '@/components/sections/CtaBand';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Avatar } from '@/components/ui/Avatar';
@@ -51,6 +52,7 @@ export default function TeamPage() {
         eyebrow="People"
         title="Our team"
         intro="Engineers, technicians, project managers and administrators — a network of skilled personnel behind every project."
+        aside={<TeamNetwork className="w-[22rem]" />}
       />
 
       {/* Leadership */}

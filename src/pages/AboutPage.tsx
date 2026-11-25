@@ -2,6 +2,7 @@ import { Check, Target } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { PageHero } from '@/components/sections/PageHero';
 import { CtaBand } from '@/components/sections/CtaBand';
+import { AboutLifecycle } from '@/components/sections/AboutLifecycle';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Blockquote } from '@/components/ui/Blockquote';
@@ -14,7 +15,12 @@ export default function AboutPage() {
         title="About S-PRO"
         description="S-PRO Consulting Engineers is an independent black-empowerment Electrical, Mechanical, Industrial Consulting and Project Management company in Cape Town."
       />
-      <PageHero eyebrow="About us" title="Engineering capital projects from detail to commissioning" intro={company.introduction[0]} />
+      <PageHero
+        eyebrow="About us"
+        title="Engineering capital projects from detail to commissioning"
+        intro={company.introduction[0]}
+        aside={<AboutLifecycle className="w-[22rem]" />}
+      />
 
       {/* Introduction + overview */}
       <section aria-labelledby="overview-heading" className="container-page grid gap-12 py-20 sm:py-24 lg:grid-cols-12">

@@ -392,7 +392,8 @@ html[data-intro-load] {
  * Discipline schematics (src/components/ui/ServiceSchematic.tsx).
  * The base styles below are the static frame (shown without JS, out of view and with
  * reduced motion). The loops are attached only while playing: in view (data-inview,
- * from useInViewPlay) or when the card is hovered / focused. Transform, opacity and
+ * from useInViewPlay) or when the card is hovered / focused. Durations scale by --sch-t
+ * (1.5 on the enlarged service-page version). Transform, opacity and
  * stroke-dashoffset only.
  */
 .sch-pulse {
@@ -417,22 +418,22 @@ html[data-intro-load] {
   transform: translate(calc(var(--dx) * 0.6), calc(var(--dy) * 0.6));
 }
 :is(.schematic[data-inview], .service-card:hover .schematic, .service-card:focus-within .schematic) .sch-pulse {
-  animation: sch-pulse 1.8s linear infinite;
+  animation: sch-pulse calc(1.8s * var(--sch-t, 1)) linear infinite;
 }
 :is(.schematic[data-inview], .service-card:hover .schematic, .service-card:focus-within .schematic) .sch-air {
-  animation: sch-air 1s linear infinite;
+  animation: sch-air calc(1s * var(--sch-t, 1)) linear infinite;
 }
 :is(.schematic[data-inview], .service-card:hover .schematic, .service-card:focus-within .schematic) .sch-spin {
-  animation: sch-spin 6s linear infinite;
+  animation: sch-spin calc(6s * var(--sch-t, 1)) linear infinite;
 }
 :is(.schematic[data-inview], .service-card:hover .schematic, .service-card:focus-within .schematic) .sch-spin-rev {
-  animation: sch-spin 3.9s linear infinite reverse;
+  animation: sch-spin calc(3.9s * var(--sch-t, 1)) linear infinite reverse;
 }
 :is(.schematic[data-inview], .service-card:hover .schematic, .service-card:focus-within .schematic) .sch-level {
-  animation: sch-level 4s ease-in-out infinite alternate;
+  animation: sch-level calc(4s * var(--sch-t, 1)) ease-in-out infinite alternate;
 }
 :is(.schematic[data-inview], .service-card:hover .schematic, .service-card:focus-within .schematic) .sch-drop {
-  animation: sch-drop 1.4s cubic-bezier(0.3, 0.6, 0.6, 1) var(--d, 0s) infinite;
+  animation: sch-drop calc(1.4s * var(--sch-t, 1)) cubic-bezier(0.3, 0.6, 0.6, 1) calc(var(--d, 0s) * var(--sch-t, 1)) infinite;
 }
 @keyframes sch-pulse {
   from {
@@ -469,6 +470,45 @@ html[data-intro-load] {
     transform: translate(var(--dx), var(--dy));
     opacity: 0;
   }
+}
+
+/*
+ * Services sheet (src/components/sections/ServicesSheet.tsx): the copper copy of each
+ * discipline, and its title-block row highlight, show while it is lit (data-on, set by
+ * the component: held by hovering / focusing its card or row, otherwise cycling while
+ * on screen). Nothing is lit in the pre-rendered HTML, so the static drawing is the
+ * steel one. The lit runs flow and the lift car rides up two floors, only with motion
+ * on. Opacity, transform and stroke-dashoffset only.
+ */
+.svc-hl {
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc-hl[data-on] {
+  opacity: 1;
+}
+.svc-flow {
+  stroke-dasharray: 4 5;
+}
+.svc-lift {
+  transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.15s;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduce-motion]) .svc-hl[data-on] .svc-flow {
+    animation: svc-flow 0.9s linear infinite;
+  }
+  html:not([data-reduce-motion]) .svc-hl[data-on] .svc-lift {
+    transform: translateY(-88px);
+  }
+}
+@keyframes svc-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+/* Caption text fades in each time the lit discipline changes (re-keyed in React). */
+.svc-caption {
+  animation: fade-in 0.35s ease-out both;
 }
 
 /*

@@ -1,14 +1,24 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
+import type { ServiceSlug } from '@/config/routes';
 import { ArrowRight, Check } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { PageHero } from '@/components/sections/PageHero';
 import { CtaBand } from '@/components/sections/CtaBand';
+import { ServicesSheet } from '@/components/sections/ServicesSheet';
 import { ServiceSchematic } from '@/components/ui/ServiceSchematic';
 import { CardDecor } from '@/components/ui/CardDecor';
 import { services } from '@/content/services';
 import { projects } from '@/content/projects';
 
 export default function ServicesPage() {
+  // The card under the pointer, else the card holding focus: the hero drawing holds that
+  // discipline lit. Kept apart so leaving one card never drops another card's focus hold.
+  const [hovered, setHovered] = useState<ServiceSlug | null>(null);
+  const [focused, setFocused] = useState<ServiceSlug | null>(null);
+  const held = hovered ?? focused;
+  const clear = (slug: ServiceSlug) => (current: ServiceSlug | null) => (current === slug ? null : current);
+
   return (
     <>
       <Seo
@@ -19,6 +29,8 @@ export default function ServicesPage() {
         eyebrow="Services"
         title="Five disciplines, one consulting team"
         intro="We offer consulting and contract administration services for commercial buildings and industrial projects — from detailing and design through supervision and commissioning."
+        aside={<ServicesSheet held={held} />}
+        asideInteractive
       />
 
       <section aria-label="Service disciplines" className="container-page py-20 sm:py-24">
@@ -30,6 +42,10 @@ export default function ServicesPage() {
                 <article
                   className="service-card group flex h-full flex-col border border-steel-200 bg-white p-8 hover:shadow-card"
                   data-tilt
+                  onMouseEnter={() => setHovered(service.slug)}
+                  onMouseLeave={() => setHovered(clear(service.slug))}
+                  onFocus={() => setFocused(service.slug)}
+                  onBlur={() => setFocused(clear(service.slug))}
                 >
                   <CardDecor />
                   <div className="flex items-start justify-between gap-4">

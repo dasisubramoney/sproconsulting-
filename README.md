@@ -2,7 +2,7 @@
 
 Source for **sproconsulting.co.za**, the website of S-PRO Consulting Engineers (Pty) Ltd. It replaces the 2018 Adobe Muse site (~40 thin pages) with a fast, secure, accessible site of 10 routes, hosted on Netlify.
 
-- **Stack:** Vite · React 18 · TypeScript · Tailwind CSS 3 · React Router 7 · Framer Motion · GSAP + ScrollTrigger · Lenis · react-helmet-async
+- **Stack:** Vite · React 18 · TypeScript · Tailwind CSS 3 · React Router 7 · Framer Motion · GSAP + ScrollTrigger · Lenis · react-helmet-async · three.js (service-page 3D models only)
 - **Rendering:** every route is pre-rendered to static HTML at build time, then hydrated by React in the browser.
 - **Hosting:** Netlify (static files, Netlify Forms, security headers, 301s from the old site).
 
@@ -167,7 +167,23 @@ A second piece of work gives the site its own motion identity: design on paper �
   - CLS 0 over the whole scroll.
   - Site-wide: axe 0 violations on 14 pages at both widths, no console errors or CSP violations.
 
-**Still to do (motion pass):** Phase 5 projects timeline and map · Phase 6 stats, team and details · Phase 7 cross-browser QA and a full "Motion system" README section.
+**Page-hero graphics and service-page 3D models (done)**
+
+About, Services, the five service pages, Sustainability, Projects and Team now each have their own drawing beside the heading instead of the generic construction lines. Contact, Privacy and the 404 page keep the construction lines. The drawings are shown from xl (1280 px) up, in the same steel-and-copper style as the rest of the site, and are decorative (hidden from screen readers) unless noted. Details are in [DESIGN.md → Motif](DESIGN.md) and [DESIGN.md → Motion](DESIGN.md#motion).
+- **About, "lifecycle":** one building drawn in section across four bays: detailing, design, supervision and commissioning ([AboutLifecycle.tsx](src/components/sections/AboutLifecycle.tsx)).
+- **Services, "drawing sheet":** a building sheet with all five disciplines and a title block. Hovering over or tabbing to a service card lights that discipline in copper. Otherwise the disciplines take turns while the sheet is on screen. The title-block rows are real links. A caption box under them shows the lit discipline's number, name, project count and summary. Screen readers skip the caption, because it repeats the cards ([ServicesSheet.tsx](src/components/sections/ServicesSheet.tsx)).
+- **Sustainability, "cutaway":** the building's water and energy cycle in section ([SustainabilityCutaway.tsx](src/components/sections/SustainabilityCutaway.tsx)).
+- **Projects, "timeline":** one copper square per project, stacked by year on a ground line from the first project year to the last. Multi-year projects have a steel line back to their start year. It's built from `projects.ts`, so it updates when projects are added ([ProjectTimeline.tsx](src/components/sections/ProjectTimeline.tsx)).
+- **Team, "single-line diagram":** the team drawn as an electrical diagram. Leadership is the supply transformer feeding a copper busbar, each discipline is a branch with a breaker, and each person is a load. It's built from `team.ts` ([TeamNetwork.tsx](src/components/sections/TeamNetwork.tsx)).
+- **Service pages:** a larger version of each discipline's animated drawing sits beside the text, with finer lines and slower loops. Below xl the small drawing stays under the intro. To make this possible, the drawings' line widths and loop speeds are now set in CSS (`--sch-k`, `--sch-solid`, `--sch-t`) rather than in the SVG. At card size they look the same as before.
+- **Service-page 3D models** ([ServiceModel.tsx](src/components/ui/ServiceModel.tsx) + [src/three/](src/three/), using three.js):
+  - On screens 1280 px and wider with a mouse or trackpad, a 3D model of the discipline replaces the larger drawing once the page is idle. It fades in. The models are a busbar and breaker feeding a motor and a lamp, a meshing gear and pinion, a sprinkler spraying, a duct into a diffuser, and a tank filling through a valve.
+  - **Entrance, "blueprint to reality":** the outlines draw in, the solids fade up through them, then the model tilts slightly towards the pointer and sways slowly.
+  - **Download cost:** the 3D code is its own file of about 149 KB gzipped. It loads only on service pages, only on desktops with a mouse, and never with reduced motion or without WebGL. Phones, tablets and everyone else keep the SVG drawing and download nothing extra. The model renders only while it's on screen and the tab is visible, and it's cleaned up when you leave the page. If WebGL fails, the drawing comes back.
+- `PageHero` gained an `aside` slot for these graphics. The pages without one still show the construction lines.
+- **Tested:** `npm run build` passes, including the type check and the pre-render check for CSP-unsafe output. `npm audit`: 0 vulnerabilities.
+
+**Still to do (motion pass):** project map · stats and details · Phase 7 cross-browser QA (including the 3D models in Safari) and a full "Motion system" README section.
 
 ### Rebrand to the approved logo
 
@@ -258,10 +274,11 @@ src/
   pages/              one component per route
   components/
     layout/             header, footer, mobile menu, skip link
-    sections/           page hero, CTA band, stats band, project card
+    sections/           page hero, CTA band, stats band, project card, page-hero drawings
     contact/            contact form, validation, click-to-load map
-    ui/                 small building blocks (logo, label, sketch lines, copper sweep, tags, avatars…)
+    ui/                 small building blocks (logo, label, sketch lines, copper sweep, tags, avatars, 3D model host…)
   motion/             all animation: tokens, GSAP hooks, page transition, intro, reduce-motion switch
+  three/              service-page 3D models (three.js): stage.ts (renderer, lazy-loaded), kit.ts, models/
   hooks/              hydration, body scroll lock
   styles/index.css    Tailwind layers, fonts, entrance animations, intro animation
   entry-server.tsx    renders a route to HTML at build time

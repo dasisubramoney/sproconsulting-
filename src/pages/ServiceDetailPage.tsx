@@ -6,6 +6,7 @@ import { CtaBand } from '@/components/sections/CtaBand';
 import { ProjectCard } from '@/components/sections/ProjectCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ServiceIcon } from '@/components/ui/ServiceIcon';
+import { ServiceModel } from '@/components/ui/ServiceModel';
 import { ServiceSchematic } from '@/components/ui/ServiceSchematic';
 import { serviceSlugs, type ServiceSlug } from '@/config/routes';
 import { getService, services } from '@/content/services';
@@ -29,8 +30,14 @@ export default function ServiceDetailPage() {
   return (
     <>
       <Seo title={`${service.title} engineering`} description={service.summary} />
-      <PageHero eyebrow="Services" title={`${service.title} engineering`} intro={service.summary}>
-        <ServiceSchematic slug={service.slug} className="mt-8 h-20 w-20" />
+      <PageHero
+        eyebrow="Services"
+        title={`${service.title} engineering`}
+        intro={service.summary}
+        aside={<ServiceModel key={service.slug} slug={service.slug} className="h-72 w-72" />}
+      >
+        {/* Below xl the enlarged schematic is hidden; this small one stands in for it. */}
+        <ServiceSchematic slug={service.slug} className="mt-8 h-20 w-20 xl:hidden" />
       </PageHero>
 
       <section aria-labelledby="capabilities-heading" className="container-page grid gap-12 py-20 sm:py-24 lg:grid-cols-2">
