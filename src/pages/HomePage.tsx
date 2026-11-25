@@ -43,7 +43,7 @@ function Hero() {
       <div aria-hidden="true" className="pointer-events-none absolute -inset-8 -z-10" data-depth="6">
         <div className="drafting-grid absolute inset-0 opacity-70" data-parallax="4" />
       </div>
-      <div className="container-page grid items-center gap-12 pb-16 pt-20 sm:pt-28 xl:grid-cols-[minmax(0,1fr)_30rem] xl:py-32">
+      <div className="container-page grid items-center gap-12 pb-16 pt-8 sm:pt-10 xl:grid-cols-[minmax(0,1fr)_30rem] xl:pb-32 xl:pt-12">
         <div>
           <p data-reveal>
             <Eyebrow intro>{company.legalName}</Eyebrow>

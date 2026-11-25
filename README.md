@@ -33,6 +33,8 @@ Source for **sproconsulting.co.za**, the website of S-PRO Consulting Engineers (
 
 The rebuild was delivered in six phases. Everything below is in this repository and has been checked with `npm run build` + `npm run preview`.
 
+**Latest:** see [Changes on 24–25 November 2026](#changes-on-2425-november-2026) for a summary of the most recent session.
+
 **1. Setup**
 - Vite + React 18 + TypeScript project with Tailwind, React Router 7 (lazy-loaded routes), Framer Motion, GSAP + ScrollTrigger, Lenis and react-helmet-async. All dependency versions are pinned exactly.
 - Design tokens (originally navy, crimson and maroon; replaced by the copper / steel rebrand below; Montserrat type scale) in [tailwind.config.ts](tailwind.config.ts), documented with contrast rules in [DESIGN.md](DESIGN.md).
@@ -169,17 +171,18 @@ A second piece of work gives the site its own motion identity: design on paper �
 
 **Page-hero graphics and service-page 3D models (done)**
 
-About, Services, the five service pages, Sustainability, Projects and Team now each have their own drawing beside the heading instead of the generic construction lines. Contact, Privacy and the 404 page keep the construction lines. The drawings are shown from xl (1280 px) up, in the same steel-and-copper style as the rest of the site, and are decorative (hidden from screen readers) unless noted. Details are in [DESIGN.md → Motif](DESIGN.md) and [DESIGN.md → Motion](DESIGN.md#motion).
+About, Services, the five service pages, Sustainability, Projects, Team and Contact now each have their own drawing beside the heading instead of the generic construction lines. Privacy and the 404 page keep the construction lines. The drawings are shown from xl (1280 px) up, in the same steel-and-copper style as the rest of the site, and are decorative (hidden from screen readers) unless noted. Details are in [DESIGN.md → Motif](DESIGN.md) and [DESIGN.md → Motion](DESIGN.md#motion).
 - **About, "lifecycle":** one building drawn in section across four bays: detailing, design, supervision and commissioning ([AboutLifecycle.tsx](src/components/sections/AboutLifecycle.tsx)).
 - **Services, "drawing sheet":** a building sheet with all five disciplines and a title block. Hovering over or tabbing to a service card lights that discipline in copper. Otherwise the disciplines take turns while the sheet is on screen. The title-block rows are real links. A caption box under them shows the lit discipline's number, name, project count and summary. Screen readers skip the caption, because it repeats the cards ([ServicesSheet.tsx](src/components/sections/ServicesSheet.tsx)).
 - **Sustainability, "cutaway":** the building's water and energy cycle in section ([SustainabilityCutaway.tsx](src/components/sections/SustainabilityCutaway.tsx)).
-- **Projects, "timeline":** one copper square per project, stacked by year on a ground line from the first project year to the last. Multi-year projects have a steel line back to their start year. It's built from `projects.ts`, so it updates when projects are added ([ProjectTimeline.tsx](src/components/sections/ProjectTimeline.tsx)).
-- **Team, "single-line diagram":** the team drawn as an electrical diagram. Leadership is the supply transformer feeding a copper busbar, each discipline is a branch with a breaker, and each person is a load. It's built from `team.ts` ([TeamNetwork.tsx](src/components/sections/TeamNetwork.tsx)).
+- **Projects, "skyline":** an elevation of the building types the company works on (station, hospital, campus, airport, mall and factory) on one ground line, each with one copper detail that identifies it. It replaced an earlier per-project timeline ([ProjectSkyline.tsx](src/components/sections/ProjectSkyline.tsx)).
+- **Team, "org board":** the leaders as larger figures at the top, a copper line down to a rail, and one branch per discipline ending in a trade icon (fan, gear, hard hat, set square, folder) with one figure per person under it. It's built from `team.ts`, so a new hire adds a figure ([TeamNetwork.tsx](src/components/sections/TeamNetwork.tsx)).
+- **Contact, "circuit":** a single-line diagram from the visitor to the office. The switch closes and the line turns copper, as if sending a message closes a circuit ([ContactCircuit.tsx](src/components/sections/ContactCircuit.tsx)).
 - **Service pages:** a larger version of each discipline's animated drawing sits beside the text, with finer lines and slower loops. Below xl the small drawing stays under the intro. To make this possible, the drawings' line widths and loop speeds are now set in CSS (`--sch-k`, `--sch-solid`, `--sch-t`) rather than in the SVG. At card size they look the same as before.
 - **Service-page 3D models** ([ServiceModel.tsx](src/components/ui/ServiceModel.tsx) + [src/three/](src/three/), using three.js):
   - On screens 1280 px and wider with a mouse or trackpad, a 3D model of the discipline replaces the larger drawing once the page is idle. It fades in. The models are a busbar and breaker feeding a motor and a lamp, a meshing gear and pinion, a sprinkler spraying, a duct into a diffuser, and a tank filling through a valve.
   - **Entrance, "blueprint to reality":** the outlines draw in, the solids fade up through them, then the model tilts slightly towards the pointer and sways slowly.
-  - **Download cost:** the 3D code is its own file of about 149 KB gzipped. It loads only on service pages, only on desktops with a mouse, and never with reduced motion or without WebGL. Phones, tablets and everyone else keep the SVG drawing and download nothing extra. The model renders only while it's on screen and the tab is visible, and it's cleaned up when you leave the page. If WebGL fails, the drawing comes back.
+  - **Download cost:** the 3D code is its own file of about 150 KB gzipped. It loads only on service pages, only on desktops with a mouse, and never with reduced motion or without WebGL. Phones, tablets and everyone else keep the SVG drawing and download nothing extra. The model renders only while it's on screen and the tab is visible, and it's cleaned up when you leave the page. If WebGL fails, the drawing comes back.
 - `PageHero` gained an `aside` slot for these graphics. The pages without one still show the construction lines.
 - **Tested:** `npm run build` passes, including the type check and the pre-render check for CSP-unsafe output. `npm audit`: 0 vulnerabilities.
 
@@ -235,6 +238,18 @@ The client approved a new logo: a copper "S" ribbon sweeping past charcoal steel
   - No console errors and no security-policy violations.
 - **Not tested:** Safari and iOS Safari, which don't run on Windows. Check them on a real iPhone and Mac on the Netlify deploy preview.
 - **Page transition:** about 0.55–0.63 s from click to the new page fully showing, with a worst case of 0.68 s, under the 0.7 s budget. To get there, the page now swaps as soon as the copper ribbon covers the screen, and all three ribbons pull away together.
+
+### Changes on 24–25 November 2026
+
+A summary of the latest session. The details are in the sections above and in [DESIGN.md](DESIGN.md).
+
+- **Home hero:** the "Blueprint to Reality" building is redrawn in 3D like the logo, and it now fills with colour on its own after loading rather than on scroll ([Phase 2](#motion--effects-pass)). The empty space between the header and the first line of text is reduced: the top padding is now 32 px on phones, 40 px on tablets and 48 px on desktop, down from 80, 112 and 128 px.
+- **Service pages:** the construction lines beside the heading are replaced by a larger version of each discipline's animated drawing. On desktops with a mouse, a three.js 3D model of the discipline then replaces the drawing: busbar to motor and lamp, meshing gears, sprinkler spray, duct and diffuser, and a filling tank. The 3D code is a separate download of about 150 KB, loaded only there. Phones, tablets, reduced motion and browsers without WebGL keep the drawing.
+- **Hero drawings on the other pages:** About (lifecycle), Services (drawing sheet with links), Sustainability (cutaway), Projects (skyline), Team (org board) and Contact (circuit).
+- **Contact page:** redesigned, with a dark office panel, service chips on the form, a character count and a click-to-load map.
+- **Team page:** an optional LinkedIn button per person (shown for S. Pietersen).
+- **Docs:** [DESIGN.md](DESIGN.md) updated for all of the above.
+- **Tested:** `npm run typecheck` and `npm run build` pass (all 14 pages pre-render with no CSP-unsafe output). The 3D models were checked in headless Chrome: they load with no console errors, aren't downloaded on narrow screens or with reduced motion, and fall back to the drawing if WebGL fails. Not yet tested in Safari or on real phones and tablets.
 
 ---
 

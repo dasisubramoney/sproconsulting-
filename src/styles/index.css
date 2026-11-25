@@ -300,6 +300,61 @@ html[data-intro] {
   animation-delay: calc(var(--d, 0s) + var(--intro-hold, 0s));
 }
 
+/*
+ * Contact hero single-line diagram (src/components/sections/ContactCircuit.tsx): the
+ * switch blade closes, then current runs from the sender to the office. The copper line
+ * and the pulse share one path, easing and duration, so the pulse rides the line's leading
+ * edge. Without CSS motion paths the pulse stays hidden and the line still runs.
+ * Reduced motion jumps all three to their end: switch closed, line copper, pulse at rest
+ * under the office. The pulse also fades out in its last 1%, so it can never be left
+ * showing, wherever it ends up. Its position has keyframes only at 0% and 100%, so that
+ * fade does not change its easing.
+ */
+.circuit-close {
+  transform-box: view-box;
+  animation: circuit-close 0.3s cubic-bezier(0.55, 0, 1, 0.45) both;
+  animation-delay: calc(var(--d, 0s) + var(--intro-hold, 0s));
+}
+.circuit-run {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw var(--dur, 1.3s) cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: calc(var(--d, 0s) + var(--intro-hold, 0s));
+}
+.circuit-pulse {
+  visibility: hidden;
+}
+@supports (offset-path: path('M0 0')) {
+  .circuit-pulse {
+    visibility: visible;
+    /* Must match LIVE in ContactCircuit.tsx. */
+    offset-path: path('M44 44 H200 V214 H296');
+    offset-rotate: 0deg;
+    animation: circuit-pulse var(--dur, 1.3s) cubic-bezier(0.65, 0, 0.35, 1) both;
+    animation-delay: calc(var(--d, 0s) + var(--intro-hold, 0s));
+  }
+}
+@keyframes circuit-close {
+  from {
+    transform: rotate(-30deg);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes circuit-pulse {
+  0% {
+    offset-distance: 0%;
+  }
+  99% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
 /* Word-by-word heading reveal (home tagline). Starts at 0.01 opacity so the heading
    still counts as painted for Largest Contentful Paint. */
 .word-rise {

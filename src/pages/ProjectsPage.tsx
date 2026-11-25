@@ -5,7 +5,7 @@ import { Seo } from '@/components/Seo';
 import { PageHero } from '@/components/sections/PageHero';
 import { CtaBand } from '@/components/sections/CtaBand';
 import { ProjectCard } from '@/components/sections/ProjectCard';
-import { ProjectTimeline } from '@/components/sections/ProjectTimeline';
+import { ProjectSkyline } from '@/components/sections/ProjectSkyline';
 import { serviceSlugs, type ServiceSlug } from '@/config/routes';
 import { projects, projectYear, type Project } from '@/content/projects';
 import { services } from '@/content/services';
@@ -74,7 +74,7 @@ export default function ProjectsPage() {
         eyebrow="Projects"
         title="Project experience"
         intro={`${projects.length} projects from ${projectYearRange.earliest} to ${projectYearRange.latest} — airports, hospitals, malls, stations, campuses and industrial facilities.`}
-        aside={<ProjectTimeline className="w-[24rem]" />}
+        aside={<ProjectSkyline className="w-[32rem]" />}
       />
 
       <section aria-labelledby="filters-heading" className="z-30 border-b border-steel-200 bg-white/95 backdrop-blur sm:sticky sm:top-16 lg:top-20">

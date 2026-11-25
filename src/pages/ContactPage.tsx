@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
 import { Seo } from '@/components/Seo';
+import { ContactCircuit } from '@/components/sections/ContactCircuit';
 import { PageHero } from '@/components/sections/PageHero';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { MapEmbed } from '@/components/contact/MapEmbed';
@@ -23,6 +24,7 @@ export default function ContactPage() {
         eyebrow="Contact"
         title="Let's talk about your project"
         intro="Send us a message and one of our engineers will get back to you, or call the office directly."
+        aside={<ContactCircuit className="w-[22rem]" />}
       >
         <div className="mt-8 flex flex-wrap gap-3 pb-10 sm:pb-12" data-reveal="3">
           <a href="#form-heading" className="btn-primary">
