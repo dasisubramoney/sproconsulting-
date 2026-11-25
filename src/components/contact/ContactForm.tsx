@@ -1,6 +1,19 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
-import { CircleAlert, CircleCheck, LoaderCircle, Send } from 'lucide-react';
+import {
+  ArrowRight,
+  Building2,
+  CircleAlert,
+  CircleCheck,
+  CircleHelp,
+  Leaf,
+  LoaderCircle,
+  Mail,
+  Phone,
+  User,
+  type LucideIcon,
+} from 'lucide-react';
+import { ServiceIcon } from '@/components/ui/ServiceIcon';
 import { services } from '@/content/services';
 import { company } from '@/content/company';
 import { limits, validateContact, type ContactErrors, type ContactValues } from './validation';
@@ -19,6 +32,19 @@ const initialValues: ContactValues = {
 };
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
+
+const tileIcon = 'h-5 w-5 shrink-0';
+
+/** Radio tiles for "What can we help with?". Values are what Netlify receives. */
+const serviceOptions: { value: string; label: string; icon: ReactNode }[] = [
+  ...services.map((s) => ({ value: s.title, label: s.title, icon: <ServiceIcon icon={s.icon} className={tileIcon} /> })),
+  {
+    value: 'Sustainable Innovation',
+    label: 'Water & energy',
+    icon: <Leaf aria-hidden="true" strokeWidth={1.75} className={tileIcon} />,
+  },
+  { value: '', label: 'Not sure yet', icon: <CircleHelp aria-hidden="true" strokeWidth={1.75} className={tileIcon} /> },
+];
 
 // Order used to focus the first invalid field.
 const fieldOrder: (keyof ContactValues)[] = ['name', 'email', 'phone', 'company', 'service', 'message', 'consent'];
@@ -122,7 +148,7 @@ export function ContactForm() {
       </p>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field id="name" label="Full name" required error={errors.name}>
+        <Field id="name" icon={User} label="Full name" required error={errors.name}>
           <input
             {...inputProps('name', errors.name)}
             type="text"
@@ -133,7 +159,7 @@ export function ContactForm() {
             onChange={(e) => set('name', e.target.value)}
           />
         </Field>
-        <Field id="email" label="Email address" required error={errors.email}>
+        <Field id="email" icon={Mail} label="Email address" required error={errors.email}>
           <input
             {...inputProps('email', errors.email)}
             type="email"
@@ -145,7 +171,7 @@ export function ContactForm() {
             onChange={(e) => set('email', e.target.value)}
           />
         </Field>
-        <Field id="phone" label="Phone number" error={errors.phone}>
+        <Field id="phone" icon={Phone} label="Phone number" error={errors.phone}>
           <input
             {...inputProps('phone', errors.phone)}
             type="tel"
@@ -155,7 +181,7 @@ export function ContactForm() {
             onChange={(e) => set('phone', e.target.value)}
           />
         </Field>
-        <Field id="company" label="Company" error={errors.company}>
+        <Field id="company" icon={Building2} label="Company" error={errors.company}>
           <input
             {...inputProps('company', errors.company)}
             type="text"
@@ -167,17 +193,42 @@ export function ContactForm() {
         </Field>
       </div>
 
-      <Field id="service" label="Service of interest">
-        <select {...inputProps('service')} value={values.service} onChange={(e) => set('service', e.target.value)}>
-          <option value="">Not sure / general enquiry</option>
-          {services.map((s) => (
-            <option key={s.slug} value={s.title}>
-              {s.title}
-            </option>
+      <fieldset>
+        <legend className="mb-3 block text-sm font-semibold text-steel-700">What can we help with?</legend>
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+          {serviceOptions.map((option, i) => (
+            <label
+              key={option.value || 'general'}
+              // The last tile ("Not sure yet") takes a full row, so the grid never leaves an orphan.
+              className={`relative block cursor-pointer ${i === serviceOptions.length - 1 ? 'col-span-2 sm:col-span-3' : ''}`}
+            >
+              <input
+                type="radio"
+                name="service"
+                value={option.value}
+                checked={values.service === option.value}
+                onChange={() => set('service', option.value)}
+                className="peer sr-only"
+              />
+              <span
+                className="flex h-full min-h-11 items-center gap-2.5 rounded-sm border border-steel-300 bg-white px-3 py-3 text-sm font-semibold text-steel-700
+                  transition-colors duration-200 ease-brand hover:border-steel-400 hover:bg-steel-50
+                  peer-checked:border-copper-700 peer-checked:bg-copper-50 peer-checked:text-ink
+                  peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-copper-500
+                  [&>svg]:text-steel-500 peer-checked:[&>svg]:text-copper-700"
+              >
+                {option.icon}
+                <span className="leading-tight">{option.label}</span>
+              </span>
+              {/* Checked marker: a copper corner, echoing the card decor. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute right-0 top-0 h-0 w-0 border-l-[14px] border-t-[14px] border-l-transparent border-t-copper-700 opacity-0 transition-opacity duration-200 peer-checked:opacity-100"
+              />
+            </label>
           ))}
-          <option value="Sustainable Innovation">Sustainable Innovation (water &amp; energy)</option>
-        </select>
-      </Field>
+        </div>
+      </fieldset>
 
       <Field
         id="message"
@@ -237,7 +288,7 @@ export function ContactForm() {
       {/* aria-disabled, not disabled: a disabled button drops keyboard focus to <body>. */}
       <button
         type="submit"
-        className="btn-primary aria-disabled:cursor-wait aria-disabled:opacity-60"
+        className="btn-primary w-full px-8 text-base sm:w-auto aria-disabled:cursor-wait aria-disabled:opacity-60"
         aria-disabled={submitting || undefined}
       >
         {submitting ? (
@@ -246,7 +297,7 @@ export function ContactForm() {
           </>
         ) : (
           <>
-            <Send aria-hidden="true" className="h-4 w-4" /> Send message
+            Send message <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </>
         )}
       </button>
@@ -254,7 +305,7 @@ export function ContactForm() {
   );
 }
 
-function inputProps(name: keyof ContactValues, error?: string, isTextarea = false) {
+function inputProps(name: keyof ContactValues, error?: string, isTextarea = false, hasIcon = !isTextarea) {
   const describedBy = [error ? `${name}-error` : null, name === 'message' ? 'message-hint' : null]
     .filter(Boolean)
     .join(' ');
@@ -263,9 +314,7 @@ function inputProps(name: keyof ContactValues, error?: string, isTextarea = fals
     name,
     'aria-invalid': error ? true : undefined,
     'aria-describedby': describedBy || undefined,
-    className: `block w-full rounded-sm border bg-white px-3 py-2.5 text-ink ${isTextarea ? '' : 'min-h-11'} ${
-      error ? 'border-error' : 'border-steel-400 focus:border-steel-700'
-    }`,
+    className: `field peer ${isTextarea ? 'resize-y' : 'min-h-12'} ${hasIcon ? 'pl-11' : ''}`,
   };
 }
 
@@ -275,10 +324,13 @@ function Field({
   required,
   error,
   hint,
+  icon: Icon,
   children,
 }: {
   id: string;
   label: string;
+  /** Decorative icon shown inside the field, on the left. */
+  icon?: LucideIcon;
   required?: boolean;
   error?: string;
   hint?: string;
@@ -298,7 +350,18 @@ function Field({
           </>
         )}
       </label>
-      {children}
+      {Icon ? (
+        <div className="relative">
+          {children}
+          <Icon
+            aria-hidden="true"
+            strokeWidth={1.75}
+            className="pointer-events-none absolute left-3.5 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-steel-500 transition-colors duration-200 peer-focus:text-copper-700"
+          />
+        </div>
+      ) : (
+        children
+      )}
       {hint && (
         <p id={`${id}-hint`} className="mt-1 text-right text-xs text-steel-600">
           {hint}

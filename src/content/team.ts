@@ -13,10 +13,18 @@ export interface TeamMember {
   group: 'leadership' | 'team';
   /** e.g. "/images/team/s-pietersen.webp" — requires consent. */
   photo?: string;
+  /** Public LinkedIn profile URL, shown as a link on the Team page. */
+  linkedin?: string;
 }
 
 export const team: TeamMember[] = [
-  { id: 's-pietersen', name: 'S. Pietersen', role: 'Managing Director', group: 'leadership' },
+  {
+    id: 's-pietersen',
+    name: 'S. Pietersen',
+    role: 'Managing Director',
+    group: 'leadership',
+    linkedin: 'https://www.linkedin.com/in/shaun-pietersen-803841102/',
+  },
   { id: 'r-verburgt', name: 'R. Verburgt', role: 'Mechanical Engineer', group: 'team' },
   // TODO: confirm surname for "Eugene".
   { id: 'eugene', name: 'Eugene', role: 'HVAC', group: 'team' },

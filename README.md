@@ -97,14 +97,17 @@ A second piece of work gives the site its own motion identity: design on paper �
 
 **Phase 2: home hero, "Blueprint to Reality" (done)**
 - **Drafting grid:** the hero sits on a faint drafting grid that shifts slightly with the mouse (desktop) and on scroll.
-- **On load:** the building drawing appears as a blueprint: steel hairlines, a copper outline of the ribbon, and the four service callouts on copper leader lines. The tagline rises word by word.
-- **As you scroll, the building is built:**
-  - the steel towers rise;
+- **3D building, like the logo:** three solid towers with a front, a darker side and a lit top, in the logo's charcoal-steel and copper, and the copper S ribbon as a solid band with a dark underside.
+- **On load:** the building appears as a 3D blueprint: steel hairlines, the towers' wireframe, the outline of the ribbon, and the four service callouts on copper leader lines. The tagline rises word by word.
+- **Once the blueprint has drawn, the building fills with the logo colours on its own**, about 1.3–4 seconds after the page opens (changed from scroll-driven at the client's request). It's pure CSS, so it plays even if scripts are slow, blocked or switched off, and it doesn't depend on scrolling:
+  - the drawing swings into place in 3D;
+  - each tower fills with the logo colours from the ground up;
   - the fire, HVAC, water and electrical runs appear;
   - the solid copper ribbon sweeps in;
   - a "render" panel is revealed behind the towers along an S-curve;
   - the linework fades back.
 - **The render panel is a placeholder.** It's a tinted panel until the client supplies a project photo or render (TODO).
+- **On desktop the building tilts slightly in 3D towards the mouse** (at most 6°).
 - **Hero buttons:** they lean slightly towards the pointer on desktop.
 - **Primary button hover:** every primary button now fills with a lighter copper along a curve on hover. The fill is copper-600, not the brief's copper-500, so white text stays above the AA contrast minimum.
 - **Without JavaScript, or with reduced motion,** the finished building is shown straight away.
@@ -305,6 +308,8 @@ Projects are listed newest first. Copy an existing entry and edit it:
 ```
 
 `group` is `'leadership'` or `'team'`. Without a photo, an initials tile is shown.
+
+**LinkedIn (optional):** add `linkedin: 'https://www.linkedin.com/in/…'` to show a "LinkedIn profile" link under the person's name. It opens in a new tab. S. Pietersen's profile is linked this way.
 
 **Photos (POPIA):** only add a photo once that person has given **written consent** for it to be published. Then:
 

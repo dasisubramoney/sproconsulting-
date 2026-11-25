@@ -1,4 +1,4 @@
-import { Compass, GraduationCap, Laptop } from 'lucide-react';
+import { Compass, ExternalLink as ExternalLinkIcon, GraduationCap, Laptop } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 import { PageHero } from '@/components/sections/PageHero';
 import { CtaBand } from '@/components/sections/CtaBand';
@@ -6,7 +6,37 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Avatar } from '@/components/ui/Avatar';
 import { Blockquote } from '@/components/ui/Blockquote';
 import { company } from '@/content/company';
-import { leadership, staff } from '@/content/team';
+import { ExternalLink } from '@/components/ui/ExternalLink';
+import { leadership, staff, type TeamMember } from '@/content/team';
+
+/** LinkedIn's "in" logo: white letters on a LinkedIn-blue rounded square. */
+function LinkedInLogo({ className = '' }: { className?: string }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className={className}>
+      <rect width="24" height="24" rx="3" className="fill-linkedin" />
+      <g className="fill-white">
+        <circle cx="6.5" cy="6.6" r="1.75" />
+        <rect x="5" y="9.4" width="3" height="9.6" />
+        <path d="M10.6 9.4h2.9v1.35c.45-.8 1.5-1.6 3.05-1.6 3.1 0 3.65 2 3.65 4.65V19h-3v-4.7c0-1.15-.05-2.6-1.6-2.6-1.6 0-1.85 1.25-1.85 2.5V19h-3.15z" />
+      </g>
+    </svg>
+  );
+}
+
+/** Button-style link to a member's LinkedIn profile; the accessible name includes who it is for. */
+function LinkedInLink({ member, className = '' }: { member: TeamMember; className?: string }) {
+  return (
+    <ExternalLink href={member.linkedin} className={`btn-secondary whitespace-nowrap px-4 ${className}`}>
+      <LinkedInLogo className="h-5 w-5 shrink-0" />
+      LinkedIn profile
+      <span className="sr-only">
+        {' '}
+        of {member.name} (opens in a new tab)
+      </span>
+      <ExternalLinkIcon aria-hidden="true" className="h-3.5 w-3.5 opacity-70" />
+    </ExternalLink>
+  );
+}
 
 export default function TeamPage() {
   const { hrDevelopment, mdQuote } = company;
@@ -30,12 +60,16 @@ export default function TeamPage() {
         </h2>
         {leadership.map((member) => (
           <div key={member.id} className="grid items-center gap-10 lg:grid-cols-12">
-            <div className="flex items-center gap-6 lg:col-span-4">
-              <Avatar member={member} size="lg" />
-              <div>
-                <p className="text-eyebrow uppercase text-copper-700">{member.role}</p>
-                <h3 className="mt-2 text-h3 text-steel-700 sm:text-2xl">{member.name}</h3>
+            <div className="lg:col-span-4">
+              <div className="flex items-center gap-6">
+                <Avatar member={member} size="lg" />
+                <div>
+                  <p className="text-eyebrow uppercase text-copper-700">{member.role}</p>
+                  <h3 className="mt-2 text-h3 text-steel-700 sm:text-2xl">{member.name}</h3>
+                </div>
               </div>
+              {/* Own row, so it never squeezes beside the photo tile on narrow columns. */}
+              {member.linkedin && <LinkedInLink member={member} className="mt-6" />}
             </div>
             {member.name === mdQuote.name && (
               <div className="lg:col-span-7 lg:col-start-6">
@@ -56,6 +90,7 @@ export default function TeamPage() {
                 <Avatar member={member} />
                 <h3 className="mt-4 font-semibold text-steel-700">{member.name}</h3>
                 <p className="mt-1 text-sm text-steel-600">{member.role}</p>
+                {member.linkedin && <LinkedInLink member={member} className="mt-2" />}
               </li>
             ))}
           </ul>

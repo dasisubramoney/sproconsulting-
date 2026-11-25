@@ -34,6 +34,7 @@ and set to the approved values below.
 | `copper-300` | `#CB9C70` | Accents and labels on `ink`; focus ring on dark |
 | `copper-100` | `#D8B492` | Thin rules, text selection, subtle fills |
 | `water` / `water-300` | `#7E97A9` / `#B4C4D0` | Graphics that must read as water only (tank levels, the Sustainability pipe); never text |
+| `linkedin` | `#0A66C2` | LinkedIn's brand blue — only inside the LinkedIn "in" logo (Team page profile button) |
 | `error` / `error-50` | `#A33A2B` / `#F9ECEA` | Form errors only — always with an icon and text |
 
 `steel` and `copper` each have a full 50–900 scale in the Tailwind theme.
@@ -141,7 +142,8 @@ Where they appear: `<HeroBlueprint>` (home hero), `<SketchLines>` (interior hero
 
 - Buttons: `.btn-primary` (copper-700, white text; hover copper-600), `.btn-secondary` (steel-700 outline on white), `.btn-on-dark` (copper-300 outline on ink). Min height 44px (target size).
 - Links in body copy: steel-700, underlined; copper-800 on hover.
-- Form fields: steel-400 border, steel-700 on focus; errors in `error` with an icon and text.
+- Form fields (`.field`): steel-400 border on a steel-50 tint, copper-700 border plus the focus ring on focus, optional decorative leading icon; errors in `error` with an icon and text. Single-choice options with icons use radio tiles (copper-700 border, copper-50 fill and a copper corner when checked).
+- Contact page: the form and an `ink` "office" panel sit in one card that overlaps the hero; contact rows on the panel are tiles whose link covers the whole tile (`.tile-link`).
 - Icons: `lucide-react`, 1.5–2px stroke, always `aria-hidden` with a text label nearby.
 - Team avatars: initials on an `ink` tile with a copper/steel corner band, until consented photos are supplied.
 - Selection: `copper-100` background, `ink` text.
@@ -198,8 +200,10 @@ Only elements that **start below the viewport** get scroll reveals, so nothing v
 - **Scroll progress** (`ScrollProgress`): a 3 px copper rule (copper-500 → copper-300) along the top, with a small steel crosshair marking its leading end.
 - **Home hero — "Blueprint to Reality"** (`HeroBlueprint` + lazy `HeroMotion`, home page only):
   - A drafting grid (steel-200 on paper) drifts with the mouse (desktop, fine pointer) and on scroll.
-  - On load (CSS): steel construction hairlines, tower outlines and a hairline copper ribbon draw; callouts pop in on copper leader lines; the tagline rises word by word.
-  - On scroll (GSAP scrub): the building is built — steel planes rise, services runs appear, the solid copper ribbon sweeps in, a render plate is revealed through an S-curve mask, and the linework fades back. The built layers (`.bp-solid`) are hidden by CSS only while JS runs with motion on (`html[data-js]`, set by `public/motion-gate.js`); otherwise the finished drawing shows. TODO: client project render/photo for the plate.
+  - 3D, after the logo: three extruded towers (oblique depth DX 22 / DY −12: front face with a steel or copper gradient, darker side face, lit top, panel divisions) and the copper S ribbon as a solid band (copper-700 → copper-300 face over a steel-800 underside).
+  - On load (CSS): steel construction hairlines, the towers' 3D wireframe and hairline outlines of the ribbon band draw; callouts pop in on copper leader lines; the tagline rises word by word.
+  - Then, on a timer (pure CSS `build-*` classes in index.css, ~1.3–4.2 s after first paint, +0.9 s on a first visit via `--build-hold`): the SVG swings square from rotateY −24° / rotateX 10°, each tower fills with colour from the ground line up (`build-rise`), the copper ribbon draws along the S (`build-draw`), the plate and services fade in, and the wireframe fades back to 35 %. CSS, so it never waits on JS or the scroll position (it also runs with JS off); reduced motion collapses it to the finished drawing. TODO: client project render/photo for the plate.
+  - 3D tilt (desktop, fine pointer): the drawing tilts up to 6° towards the pointer.
   - Magnetic CTAs (`data-magnetic`, desktop): buttons lean up to 6 px towards the pointer.
 - **Discipline schematics** (`<ServiceSchematic slug>`: home cards, Services cards, service-page heroes): steel-500 linework with the moving element in copper-500 — Electrical: current pulse with a copper-300 glow along busbar → breaker → load; Mechanical: meshing gears; Fire: sprinkler spray (half the droplets on small screens); HVAC: airflow through a duct curling out of a diffuser; Wet services: flow into a tank whose level rises (water tint). CSS loops on transform / opacity / stroke-dashoffset, attached only while playing (in view, or card hovered / focused); the markup is a complete static frame for no-JS and reduced motion.
 - **Sustainability — "Follow the Water"** (`<WaterRail>` / `<WaterStage>` in `WaterNetwork.tsx` + lazy `WaterMotion`, that page only):

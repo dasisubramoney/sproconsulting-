@@ -171,6 +171,26 @@
   .btn-on-dark {
     @apply btn border border-copper-300 text-white hover:bg-copper-300 hover:text-ink;
   }
+
+  /* Contact page: a link that makes its whole tile clickable (ContactTile). */
+  .tile-link {
+    @apply text-lg font-semibold text-white decoration-copper-300 underline-offset-4 hover:underline;
+  }
+  .tile-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Contact form fields: steel-400 border (3.42:1 non-text), copper-700 on focus (plus the global focus ring). */
+  .field {
+    @apply block w-full rounded-sm border border-steel-400 bg-steel-50/60 px-3.5 py-3 text-ink
+      transition-[border-color,background-color] duration-200 ease-brand
+      placeholder:text-steel-500 hover:border-steel-600 focus:border-copper-700 focus:bg-white;
+  }
+  .field[aria-invalid='true'] {
+    @apply border-error;
+  }
 }
 
 /*
@@ -305,12 +325,67 @@ html[data-intro] {
 }
 
 /*
- * Home hero "built" layers (steel planes, copper ribbon, services, render plate):
- * hidden only while JS runs and motion is on, because HeroMotion scrubs them in on
- * scroll. Without JS, or with reduced motion, the finished drawing is shown.
+ * Home hero build (HeroBlueprint): after the linework draws, the drawing swings square in
+ * 3D and fills with colour — towers rise from the ground line, the copper ribbon draws
+ * along the S, the plate and services fade in, the wireframe fades back. Pure CSS on a
+ * timer from first paint, so it never depends on JS or the scroll position. Reduced
+ * motion collapses every animation to its end state (the finished drawing).
+ *
+ * --build-hold, not --intro-hold: data-intro is removed when the intro ends, which would
+ * shift these longer delays mid-animation; data-intro-load stays for the page load.
  */
-html[data-js]:not([data-reduce-motion]) .bp-solid {
-  opacity: 0;
+html[data-intro-load] {
+  --build-hold: 0.9s;
+}
+.build-swing {
+  transform-origin: 50% 60%;
+  animation: build-swing 3.2s cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: var(--build-hold, 0s);
+}
+.build-rise {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: rise-from-ground var(--dur, 1.1s) cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--d, 0s) + var(--build-hold, 0s));
+}
+.build-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw var(--dur, 1.1s) cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: calc(var(--d, 0s) + var(--build-hold, 0s));
+}
+.build-fade {
+  animation: fade-in var(--dur, 0.6s) ease-out both;
+  animation-delay: calc(var(--d, 0s) + var(--build-hold, 0s));
+}
+/* The ground shadow keeps its own low opacity once faded in. */
+.build-fade.opacity-10 {
+  animation-name: fade-in-10;
+}
+.build-fadeback {
+  animation: fade-back 0.9s ease-in-out both;
+  animation-delay: calc(var(--d, 0s) + var(--build-hold, 0s));
+}
+@keyframes build-swing {
+  from {
+    transform: perspective(1100px) rotateY(-24deg) rotateX(10deg);
+  }
+  to {
+    transform: perspective(1100px);
+  }
+}
+@keyframes fade-in-10 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.1;
+  }
+}
+@keyframes fade-back {
+  to {
+    opacity: 0.35;
+  }
 }
 
 /*

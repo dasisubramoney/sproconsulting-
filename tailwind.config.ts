@@ -43,6 +43,8 @@ export default {
           DEFAULT: '#7E97A9',
           300: '#B4C4D0',
         },
+        // LinkedIn's brand blue: only for the LinkedIn logo, per their brand guidelines.
+        linkedin: '#0A66C2',
         error: {
           DEFAULT: '#A33A2B',
           50: '#F9ECEA',
